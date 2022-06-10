@@ -1,0 +1,35 @@
+# DONE AIMAG routes and controller ,
+# DONE SURGUULI routes and controller ,
+# DONE USER routes and controller, 
+# DONE HUTULBUR routes and controller models ==> index schoolid and hutulbur ner
+# DONE bugdiig shalgaad deploy hii
+# DONE design image zasvar
+# DONE DONE SEEDER file iig beltgeh
+# DONE MERGEJIL nemdeg bolgoh
+# DONE MERGEJIL duudahad shalgaltiin medeeleltei tsug irdeg bolov
+# DONE user controller and routes duusgah
+# DONE SURGALTIIN ALBA controller and 
+# DONE SEEDER FILE NEMLEE 
+#DONEkomis uusgeh
+
+#TODO auth controller and routes 
+
+#FIXME VIEWS routes and 
+
+#FIXME mergejil bolon shalgaltiin medeelliig tsugt ni zasdag bolgoh
+
+#FIXME HELMET sudlah 
+
+#BUG elseltiin komis routes and contorller 
+
+#TODO holboos hoorondoh dagaj ustah uurchlugduh iig bodoltsoh
+
+#TODO system dotorh uildluudiig routes and controller and something like that
+
+#BUG urd tal ruugaa oroh
+#BUG urd tal deer auth hiih
+
+#TODO elsegchiig maileer authentication hiih 
+#TODO kartuudiin medeelluudiig hadgalah
+
+tegeheer tulbur bolon null holboosiig salgah

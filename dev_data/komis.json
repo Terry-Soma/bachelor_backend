@@ -1,0 +1,29 @@
+[
+    {
+        "Tomilolt_Id": 1,
+        "userId": 7,
+        "s_alba_id": 2,
+        "aimag_id": 6,
+        "ognoo": "2022-03-04",
+        "createdAt": "2022-05-26T13:54:17.000Z",
+        "updatedAt": "2022-05-26T13:54:17.000Z"
+    },
+    {
+        "Tomilolt_Id": 2,
+        "userId": 1,
+        "s_alba_id": 2,
+        "aimag_id": 6,
+        "ognoo": "2022-03-04",
+        "createdAt": "2022-05-26T13:54:43.000Z",
+        "updatedAt": "2022-05-26T13:54:43.000Z"
+    },
+    {
+        "Tomilolt_Id": 3,
+        "userId": 1,
+        "s_alba_id": 2,
+        "aimag_id": 12,
+        "ognoo": "2022-03-04",
+        "createdAt": "2022-05-26T13:54:47.000Z",
+        "updatedAt": "2022-05-26T13:54:47.000Z"
+    }
+]
