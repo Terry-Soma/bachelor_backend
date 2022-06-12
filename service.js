@@ -6,19 +6,19 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const colors = require('colors');
-const helmet = require('helmet');
 const xss = require('xss-clean');
 const cors = require('cors');
 const passport = require('passport');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+// const {expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
+
 /*  config start */
 const db = require('./config/db');
 const injectDB = require('./middlewares/_injectDB');
 /* initial app */
 const app = express();
 
-/*  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 /* serve with static file  */
@@ -26,7 +26,6 @@ app.use(express.static(`${__dirname}/public`));
 app.use(
   express.static(path.join(__dirname, "/public/build"))
 );
-app.use(helmet());
 app.use(xss());
 
 const whitelist = [
