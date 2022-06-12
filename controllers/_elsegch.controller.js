@@ -198,6 +198,7 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
     mergejils
   });
 });
+
 exports.googleAuth = asyncHandler(async (req, res, next) => {
   if (!req.body.token || !req.body.burtgel_Id) {
     throw new AppError(
@@ -238,7 +239,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     }
   );
 
-  res.status(200).cookie('IKH_ZASAG_TOKEN', token, cookieOption).json({
+  res.status(200).cookie('ADMIN_TOKEN', token, cookieOption).json({
     success: true,
     data: elsegch,
   });

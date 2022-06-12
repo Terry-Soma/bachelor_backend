@@ -15,4 +15,5 @@ router
   .patch(s_albaController.updateSA)
   .delete(s_albaController.deleteSA);
 
+router.route('/google').post(s_albaController.googleAuth);
 module.exports = router;
