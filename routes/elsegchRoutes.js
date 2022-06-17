@@ -17,6 +17,8 @@ router
   .patch(elsegchController.updateElsegch)
   .delete(elsegchController.deleteElsegch);
 
+router.route('/:id/mergejils/:mergejilId').delete(elsegchController.deleteElsegchMergejil);
+  
 router.route('/:id/mergejil').get(elsegchController.getElsegchMergejil);
 router.route('/mergejil').post(elsegchController.chooseMergejil);
 router.route('/google').post(elsegchController.googleAuth);

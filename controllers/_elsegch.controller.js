@@ -98,7 +98,7 @@ exports.chooseMergejil = asyncHandler(async (req, res, next) => {
   // }
 });
 exports.updateElsegch = asyncHandler(async (req, res, next) => {
-
+  console.log(req.body)
   const result = await req.db.Elsegch.update(req.body, {
     where: {
       burtgel_Id: req.params.id,
@@ -116,15 +116,16 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
     text: 'Таны бүртгэл амжилттай баталгаажлаа',
     html
   }
-  try {
-    await sgMail.send(msg);
-    console.log("amjilttai")
-  } catch (error) {
-    console.log(error);
-    throw new AppError(error, 500);
-  }
+  // try {
+  //   await sgMail.send(msg);
+  //   console.log("amjilttai")
+  // } catch (error) {
+  //   console.log(error);
+  //   throw new AppError(error, 500);
+  // }
   res.status(200).json({
     status: 'success',
+    result
   });
 });
 
@@ -244,3 +245,18 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     data: elsegch,
   });
 });
+
+exports.deleteElsegchMergejil = asyncHandler(async(req, res, next) =>{
+  let result = await req.db.Burtgel.destroy({
+    where : {
+      elsegchId : req.params.id,
+      mergejilId : req.params.mergejilId
+    }
+  })
+  if (!result) {
+    throw new AppError(`олдсонгүй ${req.params.id}`, 404);
+  }
+  res.status(204).json({
+    status: 'success',
+  });
+})
