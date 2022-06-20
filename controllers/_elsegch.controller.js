@@ -116,13 +116,13 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
     text: 'Таны бүртгэл амжилттай баталгаажлаа',
     html
   }
-  // try {
-  //   await sgMail.send(msg);
-  //   console.log("amjilttai")
-  // } catch (error) {
-  //   console.log(error);
-  //   throw new AppError(error, 500);
-  // }
+  try {
+    await sgMail.send(msg);
+    console.log("amjilttai")
+  } catch (error) {
+    console.log(error);
+    throw new AppError(error, 500);
+  }
   res.status(200).json({
     status: 'success',
     result
