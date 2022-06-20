@@ -34,7 +34,7 @@ module.exports = {
   group by s.Id;`,
   getAllBurtgel: `
   select e.burtgel_Id as "but",e.lname as "ovog",e.fname as "ner",
-  e.email,(select group_concat(m.name)) as "mergejil", e.rd, e.utas
+  e.email,(select group_concat(m.name)) as "mergejil", e.rd, e.utas, e.aimag_id as "aimag"
   from elsegch e
   inner join eburtgel eb
   on eb.elsegchId = e.burtgel_Id
