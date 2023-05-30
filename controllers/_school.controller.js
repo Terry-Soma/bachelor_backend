@@ -34,7 +34,7 @@ exports.getSchool = asyncHandler(async (req, res, next) => {
   const school = await req.models.School.findByPk(req.params.id, {
     include: [{ model: req.models.Hutulbur }],
   });
-  const data2 = await req.models.sequelize.query(rawQueries.schoolMergejilCount, {
+  const data2 = await req.sequelize.query(rawQueries.schoolMergejilCount, {
     replacements: [req.params.id],
     type: QueryTypes.SELECT,
   });
