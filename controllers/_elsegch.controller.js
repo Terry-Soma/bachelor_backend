@@ -10,7 +10,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-  const data = await req.db.Elsegch.findAll();
+  const data = await req.models.Elsegch.findAll();
 
   res.status(200).json({
     status: 'success',
@@ -19,7 +19,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
-  const data = await req.db.sequelize.query(rawQueries.getAllBurtgel, {
+  const data = await req.models.sequelize.query(rawQueries.getAllBurtgel, {
     type: QueryTypes.SELECT,
   });
   res.status(200).json({
@@ -29,7 +29,7 @@ exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
 });
 
 exports.createElsegch = asyncHandler(async (req, res, next) => {
-  const elsegch = await req.db.Elsegch.create(req.body);
+  const elsegch = await req.models.Elsegch.create(req.body);
   if (!elsegch) {
     throw new AppError(`Error with ${req.body}`, 400);
   }
@@ -53,7 +53,7 @@ exports.createElsegch = asyncHandler(async (req, res, next) => {
 });
 
 exports.getElsegch = asyncHandler(async (req, res, next) => {
-  const elsegch = await req.db.Elsegch.findByPk(req.params.id);
+  const elsegch = await req.models.Elsegch.findByPk(req.params.id);
 
   if (!elsegch) {
     throw new AppError(`Id тай элсэгч олдсонгүй ${req.params.id}`, 404);
@@ -64,20 +64,20 @@ exports.getElsegch = asyncHandler(async (req, res, next) => {
   });
 });
 exports.chooseMergejil = asyncHandler(async (req, res, next) => {
-  // const transaction = await req.db.sequelize.transaction();
+  // const transaction = await req.models.sequelize.transaction();
   // console.log(req.body);
-  // const col = await req.db.Burtgel.create(
+  // const col = await req.models.Burtgel.create(
   //   {
   //     elsegchId: req.body.burtgel_Id,
   //     ognoo: req.body.ognoo,
   //     Mergejil: req.body.mergejils,
   //     tulburId: req.body.tulburId,
   //   },
-  //   { include: [{ model: req.db.Mergejil }] }
+  //   { include: [{ model: req.models.Mergejil }] }
   // );
   let result;
   for (let index = 0; index < req.body.mergejils.length; index++) {
-    result = await req.db.Burtgel.create({
+    result = await req.models.Burtgel.create({
       elsegchId: req.body.burtgel_Id,
       ognoo: req.body.ognoo,
       mergejilId: req.body.mergejils[index],
@@ -99,7 +99,7 @@ exports.chooseMergejil = asyncHandler(async (req, res, next) => {
 });
 exports.updateElsegch = asyncHandler(async (req, res, next) => {
   console.log(req.body)
-  const result = await req.db.Elsegch.update(req.body, {
+  const result = await req.models.Elsegch.update(req.body, {
     where: {
       burtgel_Id: req.params.id,
     },
@@ -110,8 +110,8 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
 
   const html = `<h1>Сайн байна уу ${req.body.lname} овогтой ${req.body.fname} таньд энэ өдрийн мэнд хүргэе </h1><br> Таны бүртгэлийг баталгаажууллаа. Та манай их сургуулийн мэргэжлүүдээс өөрийн хүссэн мэргэжилд бүртгүүлэн ЭЕШ-ын дүн гарсны дараа элсэх боломжтой...   <br> <p>Таныг хүссэн мэргэжлээ сонгоно гэж итгэж байна. Таньд амжилт хүсье.....</p>`;
   const msg = {
-    to: req.body.email, 
-    from: process.env.EMAIL_FROM, 
+    to: req.body.email,
+    from: process.env.EMAIL_FROM,
     subject: 'Их Засаг олон улсын их сургууль',
     text: 'Таны бүртгэл амжилттай баталгаажлаа',
     html
@@ -130,7 +130,7 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteElsegch = asyncHandler(async (req, res, next) => {
-  const result = await req.db.Elsegch.findByPk(req.params.id);
+  const result = await req.models.Elsegch.findByPk(req.params.id);
 
   if (!result) {
     throw new AppError(`Id олдсонгүй ${req.params.id}`, 404);
@@ -143,14 +143,14 @@ exports.deleteElsegch = asyncHandler(async (req, res, next) => {
 });
 
 exports.getElsegchMergejil = asyncHandler(async (req, res, next) => {
-  const mergejils = await req.db.Burtgel.findAll({
+  const mergejils = await req.models.Burtgel.findAll({
     where: {
       elsegchId: req.params.id,
     },
     attributes: ['mergejilId', 'elsegchId'],
     include: [
       {
-        model: req.db.Mergejil,
+        model: req.models.Mergejil,
         attributes: ['name'],
       },
     ],
@@ -169,26 +169,26 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
     throw new AppError('БҮТ-ийн дугаараа зөв явуулна уу', 400);
   }
 
-  butDugaar = await req.db.Elsegch.findByPk(butDugaar);
-  too = await req.db.Burtgel.count({
+  butDugaar = await req.models.Elsegch.findByPk(butDugaar);
+  too = await req.models.Burtgel.count({
     where: {
-    elsegchId : { 
-      [Op.eq] : req.body.butDugaar
-    }
+      elsegchId: {
+        [Op.eq]: req.body.butDugaar
+      }
     },
     group: ["elsegchId"],
   })
   if (!butDugaar) {
     butDugaar = +req.body.butDugaar;
   }
-  // const mergejils = await req.db.Burtgel.findAll({
+  // const mergejils = await req.models.Burtgel.findAll({
   //   attributes:[
-  //     [req.db.sequelize.fn('GROUP_CONCAT',req.db.sequelize.col('mergejilId')),'mergejils']
+  //     [req.models.sequelize.fn('GROUP_CONCAT',req.models.sequelize.col('mergejilId')),'mergejils']
   //   ],
   //   group :['elsegchId'],
   //   having : 
   // });
-  const mergejils = await req.db.sequelize.query(rawQueries.getMergejils, {
+  const mergejils = await req.models.sequelize.query(rawQueries.getMergejils, {
     replacements: [req.body.butDugaar],
     type: QueryTypes.SELECT,
   });
@@ -217,7 +217,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
       403
     );
   }
-  const elsegch = await req.db.Elsegch.create({
+  const elsegch = await req.models.Elsegch.create({
     burtgel_Id: req.body.burtgel_Id,
     email: result.email,
   });
@@ -246,11 +246,11 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.deleteElsegchMergejil = asyncHandler(async(req, res, next) =>{
-  let result = await req.db.Burtgel.destroy({
-    where : {
-      elsegchId : req.params.id,
-      mergejilId : req.params.mergejilId
+exports.deleteElsegchMergejil = asyncHandler(async (req, res, next) => {
+  let result = await req.models.Burtgel.destroy({
+    where: {
+      elsegchId: req.params.id,
+      mergejilId: req.params.mergejilId
     }
   })
   if (!result) {

@@ -4,7 +4,7 @@ const asyncHandler = require("../middlewares/_asyncHandler");
 const { verifyToken } = require("../utils/_googleOAuth");
 const jwt = require('jsonwebtoken')
 exports.getAll = asyncHandler(async (req, res, next) => {
-  const sa = await req.db.SA.findAll();
+  const sa = await req.models.SA.findAll();
   res.status(200).json({
     status: "success",
     data: sa,
@@ -12,7 +12,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
 });
 
 exports.createSAlba = asyncHandler(async (req, res, next) => {
-  const sa = await req.db.SA.create(req.body);
+  const sa = await req.models.SA.create(req.body);
 
   if (!sa) {
     throw new AppError(`Үүсгэх үед алдаа гарлаа ${req.body}`, 500);
@@ -24,7 +24,7 @@ exports.createSAlba = asyncHandler(async (req, res, next) => {
 });
 
 exports.getSA = asyncHandler(async (req, res, next) => {
-  const sa = await req.db.SA.findByPk(req.params.id);
+  const sa = await req.models.SA.findByPk(req.params.id);
   if (!sa) {
     throw new AppError(`Id олдсонгүй ${req.params.id} `, 404);
   }
@@ -34,7 +34,7 @@ exports.getSA = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateSA = asyncHandler(async (req, res, next) => {
-  let result = await req.db.SA.findByPk(req.params.id);
+  let result = await req.models.SA.findByPk(req.params.id);
 
   if (!result) {
     throw new AppError(`${req.params.id} -тай СА олдсонгүй`, 404);
@@ -49,7 +49,7 @@ exports.updateSA = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteSA = asyncHandler(async (req, res, next) => {
-  let result = await req.db.SA.findByPk(req.params.id);
+  let result = await req.models.SA.findByPk(req.params.id);
 
   if (!result) {
     throw new AppError(`${req.params.id} -тай СА олдсонгүй`, 404);
@@ -81,7 +81,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const sa = await req.db.SA.findOne({ where: { email: result.email} });
+  const sa = await req.models.SA.findOne({ where: { email: result.email } });
   if (!sa) {
     throw new AppError('Та буруу и-мэйл хаяг явуулсан байна', 400);
   }

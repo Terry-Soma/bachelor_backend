@@ -1,4 +1,4 @@
 module.exports = (db) => (req, res, next) => {
-  req.db = db;
+  req.models = db.models;
   next();
 };

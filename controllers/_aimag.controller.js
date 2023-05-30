@@ -3,7 +3,7 @@ const asyncHandler = require('../middlewares/_asyncHandler');
 const PQ = require('../utils/_features');
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-  const aimags = await req.db.Aimag.findAll();
+  const aimags = await req.models.Aimag.findAll();
   res.status(200).json({
     status: 'success',
     data: aimags,
@@ -11,7 +11,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
 });
 
 exports.createAimag = asyncHandler(async (req, res, next) => {
-  const aimag = await req.db.Aimag.create(req.body);
+  const aimag = await req.models.Aimag.create(req.body);
   if (!aimag) {
     throw new AppError(`Error with ${req.body}`, 400);
   }
@@ -22,7 +22,7 @@ exports.createAimag = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAimag = asyncHandler(async (req, res, next) => {
-  const aimag = await req.db.Aimag.findByPk(req.params.id);
+  const aimag = await req.models.Aimag.findByPk(req.params.id);
 
   if (!aimag) {
     throw new AppError(`Id тай аймаг олдсонгүй ${req.params.id}`, 404);
@@ -34,7 +34,7 @@ exports.getAimag = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateAimag = asyncHandler(async (req, res, next) => {
-  const result = await req.db.Aimag.update(req.body, {
+  const result = await req.models.Aimag.update(req.body, {
     where: {
       Id: req.params.id,
     },
@@ -50,7 +50,7 @@ exports.updateAimag = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteAimag = asyncHandler(async (req, res, next) => {
-  const result = await req.db.Aimag.destroy({
+  const result = await req.models.Aimag.destroy({
     where: { id: req.params.id },
   });
 

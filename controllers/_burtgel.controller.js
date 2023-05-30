@@ -5,14 +5,14 @@ const { QueryTypes } = require('sequelize');
 const rawQueries = require('../config/raw.queries');
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-  //   const data = await req.db.Burtgel.findAll({
+  //   const data = await req.models.Burtgel.findAll({
   //     include: [
   //       {
-  //         model: req.db.Mergejil,
+  //         model: req.models.Mergejil,
   //       },
   //     ],
   //   });
-  const data = await req.db.sequelize.query(rawQueries.burtgelInfo, {
+  const data = await req.models.sequelize.query(rawQueries.burtgelInfo, {
     type: QueryTypes.SELECT,
   });
 
@@ -22,32 +22,32 @@ exports.getAll = asyncHandler(async (req, res, next) => {
   });
 });
 exports.getCount = asyncHandler(async (req, res, next) => {
-  // const data = await req.db.Burtgel.findAll({
+  // const data = await req.models.Burtgel.findAll({
   //   attributes: [
   //     'mergejilId',
   //     [
-  //       req.db.sequelize.fn('COUNT', req.db.sequelize.col('mergejilId')),
+  //       req.models.sequelize.fn('COUNT', req.models.sequelize.col('mergejilId')),
   //       'Count',
   //     ],
   //   ],
   //   include: [
   //     {
-  //       model: req.db.Mergejil,
+  //       model: req.models.Mergejil,
   //       attributes: ['name'],
   //     },
   //   ],
   //   group: 'mergejilId',
   // });/*  more complex  */
-  const data = await req.db.sequelize.query(rawQueries.getCount, {
+  const data = await req.models.sequelize.query(rawQueries.getCount, {
     type: QueryTypes.SELECT,
   });
-  const sdata = await req.db.sequelize.query(rawQueries.getSchoolBurtgelCount, {
+  const sdata = await req.models.sequelize.query(rawQueries.getSchoolBurtgelCount, {
     type: QueryTypes.SELECT,
   });
-  const kdata = await req.db.Elsegch.findAll({
+  const kdata = await req.models.Elsegch.findAll({
     attributes: [
       [
-        req.db.sequelize.fn('COUNT', req.db.sequelize.col('burtgel_Id')),
+        req.models.sequelize.fn('COUNT', req.models.sequelize.col('burtgel_Id')),
         'burt',
       ],
     ],
@@ -57,10 +57,10 @@ exports.getCount = asyncHandler(async (req, res, next) => {
       },
     },
   });
-  const odata = await req.db.Elsegch.findAll({
+  const odata = await req.models.Elsegch.findAll({
     attributes: [
       [
-        req.db.sequelize.fn('COUNT', req.db.sequelize.col('burtgel_Id')),
+        req.models.sequelize.fn('COUNT', req.models.sequelize.col('burtgel_Id')),
         'burt',
       ],
     ],

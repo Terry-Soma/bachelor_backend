@@ -8,7 +8,7 @@ const AppError = require('../utils/_appError');
 const PQ = require('../utils/_features');
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-  const { prepared_statement } = new PQ(req.db.School, req.query).exec();
+  const { prepared_statement } = new PQ(req.models.School, req.query).exec();
 
   const schools = await prepared_statement;
   res.status(200).json({
@@ -19,7 +19,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
 });
 
 exports.createSchool = asyncHandler(async (req, res, next) => {
-  const school = await req.db.School.create(req.body);
+  const school = await req.models.School.create(req.body);
 
   if (!school) {
     throw new AppError('Uusgeh uyd aldaa garlaa', 500);
@@ -31,10 +31,10 @@ exports.createSchool = asyncHandler(async (req, res, next) => {
 });
 
 exports.getSchool = asyncHandler(async (req, res, next) => {
-  const school = await req.db.School.findByPk(req.params.id, {
-    include: [{ model: req.db.Hutulbur }],
+  const school = await req.models.School.findByPk(req.params.id, {
+    include: [{ model: req.models.Hutulbur }],
   });
-  const data2 = await req.db.sequelize.query(rawQueries.schoolMergejilCount, {
+  const data2 = await req.models.sequelize.query(rawQueries.schoolMergejilCount, {
     replacements: [req.params.id],
     type: QueryTypes.SELECT,
   });
@@ -56,7 +56,7 @@ exports.uploadSchoolPhoto = asyncHandler(async (req, res, next) => {
     throw new AppError('Та файл оруулах ёстой', 400);
   }
   const file = req.files.file;
-  const school = await req.db.School.findByPk(req.params.id);
+  const school = await req.models.School.findByPk(req.params.id);
   if (!school) {
     throw new AppError(`${req.body} ${school}`, 404);
   }
@@ -81,7 +81,7 @@ exports.uploadSchoolPhoto = asyncHandler(async (req, res, next) => {
   });
 });
 exports.updateSchool = asyncHandler(async (req, res, next) => {
-  const result = await req.db.School.update(req.body, {
+  const result = await req.models.School.update(req.body, {
     where: {
       Id: req.params.id,
     },
@@ -95,7 +95,7 @@ exports.updateSchool = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteSchool = asyncHandler(async (req, res, next) => {
-  let doc = await req.db.School.findByPk(req.params.id);
+  let doc = await req.models.School.findByPk(req.params.id);
 
   if (!doc) {
     throw new AppError(`${req.params.id} -тай Сургууль олдсонгүй`, 404);

@@ -10,7 +10,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
       [key]: req.params[key],
     };
   }
-  const { prepared_statement } = new PQ(req.db.Hutulbur, req.query).exec();
+  const { prepared_statement } = new PQ(req.models.Hutulbur, req.query).exec();
   const hutulbur = await prepared_statement;
 
   res.status(200).json({
@@ -24,7 +24,7 @@ exports.createHutulbur = asyncHandler(async (req, res, next) => {
     let key = Object.keys(req.params);
     req.body[key] = req.params[key];
   }
-  const hutulbur = await req.db.Hutulbur.create(req.body);
+  const hutulbur = await req.models.Hutulbur.create(req.body);
   if (!hutulbur) {
     throw new AppError('Хөтөлбөр үүсгэх үед алдаа гарлаа', 500);
   }
@@ -35,7 +35,7 @@ exports.createHutulbur = asyncHandler(async (req, res, next) => {
 });
 
 exports.getHutulbur = asyncHandler(async (req, res, next) => {
-  const hutulbur = await req.db.Hutulbur.findByPk(req.params.id);
+  const hutulbur = await req.models.Hutulbur.findByPk(req.params.id);
 
   if (!hutulbur) {
     throw new AppError(`Хөтөлбөр олдсонгүй ${req.params.id}`, 404);
@@ -48,7 +48,7 @@ exports.getHutulbur = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateHutulbur = asyncHandler(async (req, res, next) => {
-  const result = await req.db.Hutulbur.update(req.body, {
+  const result = await req.models.Hutulbur.update(req.body, {
     where: {
       Id: req.params.id,
     },
@@ -62,7 +62,7 @@ exports.updateHutulbur = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteHutulbur = asyncHandler(async (req, res, next) => {
-  const hutulbur = await req.db.Hutulbur.findByPk(req.params.id);
+  const hutulbur = await req.models.Hutulbur.findByPk(req.params.id);
 
   if (!hutulbur) {
     throw new AppError(`Хөтөлбөр олдсонгүй ${req.params.id}`, 404);

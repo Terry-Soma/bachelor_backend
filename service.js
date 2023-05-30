@@ -13,8 +13,14 @@ const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 // const {expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 
-/*  config start */
+/**
+ * Өгөгдлийн баазын моделуудийг баазад үүсгэх
+ */
 const db = require('./config/db');
+const initModels = require('./databaseModels/init-models')
+initModels(db);
+
+/*  config start */
 const injectDB = require('./middlewares/_injectDB');
 /* initial app */
 const app = express();
@@ -58,7 +64,7 @@ const hutulburRouter = require('./routes/hutulburRoutes');
 const mergejilRouter = require('./routes/mergejilRoutes');
 const aimagRouter = require('./routes/aimagRoutes');
 const surgaltAlbaRouter = require('./routes/saRoutes');
-const authRouter = require('./routes/authRoutes');
+
 const shalguurRouter = require('./routes/shalguurRoutes');
 const mergejilShalguurRouter = require('./routes/mergejilShalguurRoutes');
 const elsegchRouter = require('./routes/elsegchRoutes');
@@ -67,7 +73,6 @@ const viewRouter = require('./routes/viewRoutes');
 const burtgelRouter = require('./routes/burtgelRoutes');
 /* end routes */
 
-const loginRoute = require('./routes/loginRoute');
 const seederRouter = require('./seeders/index');
 /* dev routes */
 /* error handlers catchError etc ** */
@@ -76,16 +81,16 @@ const globalErrorHandler = require('./controllers/_errorHandler');
 /* end error handlers */
 
 /* logger  */
-// if (process.env.NODE_ENV === 'dev') {
-//   app.use(morgan('dev'));
-//   app.use(
-//     morgan('common', {
-//       stream: fs.createWriteStream(path.join(__dirname, '/logs/access.log'), {
-//         flags: 'a',
-//       }),
-//     })
-//   );
-// }
+if (process.env.NODE_ENV == 'dev') {
+  app.use(morgan('dev'));
+  app.use(
+    morgan('common', {
+      stream: fs.createWriteStream(path.join(__dirname, '/logs/access.log'), {
+        flags: 'a',
+      }),
+    })
+  );
+}
 app.use(fileUpload());
 app.use(injectDB(db));
 
@@ -99,8 +104,8 @@ app.use('/api/v1/school', schoolRouter);
 app.use('/api/v1/hutulbur', hutulburRouter);
 app.use('/api/v1/mergejil', mergejilRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/loginfb', loginRoute);
-app.use('/api/v1/auth/', authRouter);
+
+
 app.use('/api/v1/shalguur', shalguurRouter); /* shalguur route */
 app.use('/api/v1/seeder', seederRouter);
 app.use('/api/v1/mergejil-shalguur', mergejilShalguurRouter);
@@ -109,9 +114,21 @@ app.use('/api/v1/komis', komisRouter);
 app.use('/api/v1/views', viewRouter);
 app.use('/api/v1/burtgel', burtgelRouter);
 /* EndROUTES */
+
 app.use('/api/v1/', (req, res, next) => {
   res.sendFile(__dirname + '/index.html');
 });
+
+
+console.log('pro', process.env.NODE_ENV)
+db.sync().then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
+// if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'production') {
+//   console.log('production mode');
+//   db.sync({ force: true }).then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
+// } else {
+//   console.log('dev  mode'.america);
+//   db.sync().then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...${process.env.NODE_ENV}`.rainbow) }).catch(err => { console.log('first', err) });
+// }
 
 /* Unknown url or something
  404 page
@@ -123,54 +140,24 @@ app.get("*", (req, res) => {
 });
 
 
+
 app.use(globalErrorHandler);
 
-/* db modeling  */
 
-db.School.hasMany(db.Hutulbur, { foreignKey: 'schoolId' });
-db.Hutulbur.belongsTo(db.School, { foreignKey: 'schoolId' });
-
-db.Hutulbur.hasMany(db.Mergejil, { foreignKey: 'hutulburId' });
-db.Mergejil.belongsTo(db.Hutulbur, { foreignKey: 'hutulburId' });
-
-db.Mergejil.belongsToMany(db.Shalguur, { through: { model: db.MSH,unique:false }});
-db.Shalguur.belongsToMany(db.Mergejil, { through: {model : db.MSH , unique: false} });
-
-db.Mergejil.hasMany(db.MSH);
-db.MSH.belongsTo(db.Mergejil);
-db.Shalguur.hasMany(db.MSH);
-db.MSH.belongsTo(db.Shalguur);
-
-db.User.hasMany(db.Komis, { foreignKey: 'userId' });
-db.Komis.belongsTo(db.User, { foreignKey: 'userId' });
-
-db.SA.hasMany(db.Komis, { foreignKey: 's_alba_id' });
-db.Komis.belongsTo(db.SA, { foreignKey: 's_alba_id' });
-
-db.Aimag.hasMany(db.Komis, { foreignKey: 'aimag_id' });
-db.Komis.belongsTo(db.Aimag, { foreignKey: 'aimag_id' });
-
-db.Aimag.hasMany(db.Elsegch, { foreignKey: 'aimag_id' });
-db.Elsegch.belongsTo(db.Aimag, { foreignKey: 'aimag_id' });
-db.Mergejil.hasMany(db.Burtgel, { foreignKey: 'mergejilId' });
-db.Burtgel.belongsTo(db.Mergejil, { foreignKey: 'mergejilId' });
-
-/* end db model association */
-
-if (process.env.NODE_ENV === 'force' || process.env.NODE_ENV === 'production') {
-  db.sequelize
-    .sync({ force: true })
-    .then((res) => {
-      console.log(`sync hiigdlee`);
-    })
-    .catch((err) => console.log(err));
-} else {
-  db.sequelize
-    .sync()
-    .then((res) => {
-      console.log(` --->sync hiigdlee`);
-    })
-    .catch((err) => console.log(err));
-}
+// if (process.env.NODE_ENV === 'force' || process.env.NODE_ENV === 'production') {
+//   db.sequelize
+//     .sync({ force: true })
+//     .then((res) => {
+//       console.log(`sync hiigdlee`);
+//     })
+//     .catch((err) => console.log(err));
+// } else {
+//   db.sequelize
+//     .sync()
+//     .then((res) => {
+//       console.log(` --->sync hiigdlee`);
+//     })
+//     .catch((err) => console.log(err));
+// }
 
 module.exports = app;

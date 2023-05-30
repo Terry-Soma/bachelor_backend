@@ -5,7 +5,7 @@ const AppError = require('../utils/_appError');
 const PQ = require('../utils/_features');
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-  const { prepared_statement } = new PQ(req.db.User, req.query).exec();
+  const { prepared_statement } = new PQ(req.models.User, req.query).exec();
   const users = await prepared_statement;
 
   res.status(200).json({
@@ -14,7 +14,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
   });
 });
 exports.createUser = asyncHandler(async (req, res, next) => {
-  const user = await req.db.User.create(req.body);
+  const user = await req.models.User.create(req.body);
   if (!user) {
     throw new AppError('Үүсгэх үед алдаа гарлаа', 500);
   }
@@ -25,7 +25,7 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const user = await req.db.User.findByPk(req.params.id);
+  const user = await req.models.User.findByPk(req.params.id);
 
   if (!user) {
     throw new AppError(`${req.params.id}тай хэрэглэгч олдсонгүй`, 404);
@@ -36,7 +36,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   });
 });
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  const user = await req.db.User.findByPk(req.params.id);
+  const user = await req.models.User.findByPk(req.params.id);
   if (!user) {
     throw new AppError(req.params.id + 'тэй хэрэглэгч алга', 404);
   }
@@ -48,7 +48,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  const user = await req.db.User.findByPk(req.params.id);
+  const user = await req.models.User.findByPk(req.params.id);
 
   if (!user) {
     throw new AppError(`Хэрэглэгч олдсонгүй Буруу ID ирлээ`, 404);

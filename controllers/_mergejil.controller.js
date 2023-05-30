@@ -11,7 +11,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
       [key]: req.params[key],
     };
   }
-  const { prepared_statement } = new PQ(req.db.Mergejil, req.query).exec();
+  const { prepared_statement } = new PQ(req.models.Mergejil, req.query).exec();
   const mergejil = await prepared_statement;
 
   res.status(200).json({
@@ -26,11 +26,11 @@ exports.createMergejil = asyncHandler(async (req, res, next) => {
     req.body[key] = req.params[key];
   }
   let result;
-  const transaction = await req.db.sequelize.transaction();
+  const transaction = await req.models.sequelize.transaction();
   try {
     const {
       dataValues: { Id },
-    } = await req.db.Mergejil.create(
+    } = await req.models.Mergejil.create(
       {
         name: req.body.name,
         mergeshil: req.body.mergeshil,
@@ -48,7 +48,7 @@ exports.createMergejil = asyncHandler(async (req, res, next) => {
         MergejilId: Id,
       };
     });
-    result = await req.db.MSH.bulkCreate(msh, { transaction });
+    result = await req.models.MSH.bulkCreate(msh, { transaction });
     await transaction.commit();
   } catch (error) {
     await transaction.rollback();
@@ -62,19 +62,19 @@ exports.createMergejil = asyncHandler(async (req, res, next) => {
 });
 
 exports.getMergejil = asyncHandler(async (req, res, next) => {
-  // const mergejil = await req.db.Mergejil.findByPk(req.params.id, {
+  // const mergejil = await req.models.Mergejil.findByPk(req.params.id, {
   //   include: [
   //     {
-  //       model: req.db.MSH,
+  //       model: req.models.MSH,
   //       attributes: ['shalguuriin_turul'],
-  //       include: [{ model: req.db.Shalguur, attributes: ['name'] }],
+  //       include: [{ model: req.models.Shalguur, attributes: ['name'] }],
   //     },
   //   ],
   //   attributes: {
   //     exclude: ['createdAt', 'updatedAt'],
   //   },
   // });
-  const mergejil = await req.db.sequelize.query(rawQueries.mergejil_Shalgalt, {
+  const mergejil = await req.models.sequelize.query(rawQueries.mergejil_Shalgalt, {
     replacements: [req.params.id],
     type: QueryTypes.SELECT,
   });
@@ -89,14 +89,14 @@ exports.getMergejil = asyncHandler(async (req, res, next) => {
 });
 
 exports.getMergejilWithMoreInfo = asyncHandler(async (req, res, next) => {
-  const mergejil = await req.db.Mergejil.findByPk(req.params.id, {
+  const mergejil = await req.models.Mergejil.findByPk(req.params.id, {
     include: [
       {
-        model: req.db.MSH,
+        model: req.models.MSH,
         // attributes: ['shalguuriin_turul'],
         include: [
           {
-            model: req.db.Shalguur,
+            model: req.models.Shalguur,
             // attributes: ['name']
           },
         ],
@@ -117,7 +117,7 @@ exports.getMergejilWithMoreInfo = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateMergejil = asyncHandler(async (req, res, next) => {
-  const result = await req.db.Mergejil.update(req.body, {
+  const result = await req.models.Mergejil.update(req.body, {
     where: {
       id: req.params.id,
     },
@@ -133,7 +133,7 @@ exports.updateMergejil = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteMergejil = asyncHandler(async (req, res, next) => {
-  const mergejil = await req.db.Mergejil.findByPk(req.params.id);
+  const mergejil = await req.models.Mergejil.findByPk(req.params.id);
 
   if (!mergejil) {
     throw new AppError(`${req.params.id} тэй мэргэжил олдсонгүй `, 404);

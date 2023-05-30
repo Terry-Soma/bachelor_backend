@@ -1,11 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-
 const Sequelize = require('sequelize');
-let db = {};
-let sequelize;
 
-sequelize = new Sequelize(
+const sequelize = new Sequelize(
   process.env.LOCAL_SEQUILIZE_DATABASE,
   process.env.LOCAL_SEQUILIZE_USER,
   process.env.LOCAL_SEQUILIZE_USER_PASSWORD,
@@ -27,24 +22,5 @@ sequelize = new Sequelize(
 );
 
 /* auto fs read */
-const models = [
-  require('../models/Aimag.js'),
-  require('../models/School'),
-  require('../models/Hutulbur'),
-  require('../models/Mergejil'),
-  require('../models/Shalguur'),
-  require('../models/S_alba'),
-  require('../models/User'),
-  require('../models/Komis'),
-  require('../models/Elsegch.js'),
-  require('../models/Tulbur'),
-  require('../models/Burtgel'),
-  require('../models/Mergejil_Shalguur'),
-];
 
-models.forEach((model) => {
-  const seqModel = model(sequelize, Sequelize);
-  db[seqModel.name] = seqModel;
-});
-db.sequelize = sequelize;
-module.exports = db;
+module.exports = sequelize;
