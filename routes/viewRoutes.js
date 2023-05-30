@@ -4,7 +4,7 @@ const rawQueries = require('../config/raw.queries');
 const router = require('express').Router();
 
 router.get('/allinfo', async (req, res, next) => {
-  const data = await req.db.sequelize.query(rawQueries.allInfo, {
+  const data = await req.sequelize.query(rawQueries.allInfo, {
     type: QueryTypes.SELECT,
   });
 

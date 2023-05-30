@@ -19,7 +19,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
-  const data = await req.models.sequelize.query(rawQueries.getAllBurtgel, {
+  const data = await req.sequelize.query(rawQueries.getAllBurtgel, {
     type: QueryTypes.SELECT,
   });
   res.status(200).json({
@@ -188,7 +188,7 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
   //   group :['elsegchId'],
   //   having : 
   // });
-  const mergejils = await req.models.sequelize.query(rawQueries.getMergejils, {
+  const mergejils = await req.sequelize.query(rawQueries.getMergejils, {
     replacements: [req.body.butDugaar],
     type: QueryTypes.SELECT,
   });

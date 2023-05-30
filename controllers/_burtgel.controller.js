@@ -12,7 +12,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
   //       },
   //     ],
   //   });
-  const data = await req.models.sequelize.query(rawQueries.burtgelInfo, {
+  const data = await req.sequelize.query(rawQueries.burtgelInfo, {
     type: QueryTypes.SELECT,
   });
 
@@ -38,16 +38,16 @@ exports.getCount = asyncHandler(async (req, res, next) => {
   //   ],
   //   group: 'mergejilId',
   // });/*  more complex  */
-  const data = await req.models.sequelize.query(rawQueries.getCount, {
+  const data = await req.sequelize.query(rawQueries.getCount, {
     type: QueryTypes.SELECT,
   });
-  const sdata = await req.models.sequelize.query(rawQueries.getSchoolBurtgelCount, {
+  const sdata = await req.sequelize.query(rawQueries.getSchoolBurtgelCount, {
     type: QueryTypes.SELECT,
   });
   const kdata = await req.models.Elsegch.findAll({
     attributes: [
       [
-        req.models.sequelize.fn('COUNT', req.models.sequelize.col('burtgel_Id')),
+        req.sequelize.fn('COUNT', req.sequelize.col('burtgel_Id')),
         'burt',
       ],
     ],
@@ -60,7 +60,7 @@ exports.getCount = asyncHandler(async (req, res, next) => {
   const odata = await req.models.Elsegch.findAll({
     attributes: [
       [
-        req.models.sequelize.fn('COUNT', req.models.sequelize.col('burtgel_Id')),
+        req.sequelize.fn('COUNT', req.sequelize.col('burtgel_Id')),
         'burt',
       ],
     ],

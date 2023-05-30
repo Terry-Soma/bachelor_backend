@@ -26,7 +26,7 @@ exports.createMergejil = asyncHandler(async (req, res, next) => {
     req.body[key] = req.params[key];
   }
   let result;
-  const transaction = await req.models.sequelize.transaction();
+  const transaction = await req.sequelize.transaction();
   try {
     const {
       dataValues: { Id },
@@ -74,7 +74,7 @@ exports.getMergejil = asyncHandler(async (req, res, next) => {
   //     exclude: ['createdAt', 'updatedAt'],
   //   },
   // });
-  const mergejil = await req.models.sequelize.query(rawQueries.mergejil_Shalgalt, {
+  const mergejil = await req.sequelize.query(rawQueries.mergejil_Shalgalt, {
     replacements: [req.params.id],
     type: QueryTypes.SELECT,
   });
