@@ -189,15 +189,15 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
   //   group :['elsegchId'],
   //   having : 
   // });
-  // const mergejils = await req.sequelize.query(rawQueries.getMergejils, {
-  //   replacements: [req.body.butDugaar],
-  //   type: QueryTypes.SELECT,
-  // });
+  const mergejils = await req.sequelize.query(rawQueries.getMergejils, {
+    replacements: [req.body.butDugaar],
+    type: QueryTypes.SELECT,
+  });
   res.status(200).json({
     status: 'success',
     butDugaar,
     too,
-    // mergejils
+    mergejils
   });
 });
 
