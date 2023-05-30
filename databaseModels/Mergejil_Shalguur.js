@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.ENUM({
           values: ['1', '2'],
         }),
-        defaultValue: 2,
+        defaultValue: "2",
         allowNull: false,
       },
       MergejilId: {

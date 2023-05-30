@@ -24,12 +24,12 @@ const mergejil = JSON.parse(
 const msh = JSON.parse(
   fs.readFileSync(__dirname + '/../dev_data/mergejilShalgalt.json', 'utf-8')
 );
-let arr = msh.map(el=> {
-  if(el["Id"])
+let arr = msh.map(el => {
+  if (el["Id"])
     delete el["Id"]
   return el;
-  });
-  
+});
+
 const user = JSON.parse(
   fs.readFileSync(__dirname + '/../dev_data/user.json', 'utf-8')
 );
@@ -40,15 +40,15 @@ const komis = JSON.parse(
   fs.readFileSync(__dirname + '/../dev_data/komis.json', 'utf-8')
 );
 const importData = _asyncHandler(async (req, res, next) => {
-  await req.db.Aimag.bulkCreate(aimag);
-  await req.db.Shalguur.bulkCreate(shalguur);
-  await req.db.School.bulkCreate(school);
-  await req.db.Hutulbur.bulkCreate(hutulbur);
-  await req.db.Mergejil.bulkCreate(mergejil);
-  await req.db.MSH.bulkCreate(arr);
-  await req.db.User.bulkCreate(user);
-  await req.db.SA.bulkCreate(alba);
-  await req.db.Komis.bulkCreate(komis);
+  await req.models.Aimag.bulkCreate(aimag);
+  await req.models.Shalguur.bulkCreate(shalguur);
+  await req.models.School.bulkCreate(school);
+  await req.models.Hutulbur.bulkCreate(hutulbur);
+  await req.models.Mergejil.bulkCreate(mergejil);
+  await req.models.MSH.bulkCreate(arr);
+  await req.models.User.bulkCreate(user);
+  await req.models.SA.bulkCreate(alba);
+  await req.models.Komis.bulkCreate(komis);
 
   res.status(200).json({
     status: 'success',
@@ -57,12 +57,12 @@ const importData = _asyncHandler(async (req, res, next) => {
 });
 
 const deleteData = _asyncHandler(async (req, res, next) => {
-  await req.db.Aimag.destroy({ where: {} });
-  await req.db.School.destroy({ where: {} });
-  await req.db.Hutulbur.destroy({ where: {} });
-  await req.db.Shalguur.destroy({ where: {} });
-  await req.db.MSH.destroy({ where: {} });
-  await req.db.Mergejil.destroy({ where: {} });
+  await req.models.Aimag.destroy({ where: {} });
+  await req.models.School.destroy({ where: {} });
+  await req.models.Hutulbur.destroy({ where: {} });
+  await req.models.Shalguur.destroy({ where: {} });
+  await req.models.MSH.destroy({ where: {} });
+  await req.models.Mergejil.destroy({ where: {} });
 
   res.status(204).json({
     data: null,
@@ -72,7 +72,7 @@ const sgMail = require('@sendgrid/mail')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 
-const email= async(req,res,next)=>{
+const email = async (req, res, next) => {
   const msg = {
     to: 'test@example.com', // Change to your recipient
     from: 'test@example.com', // Change to your verified sender
@@ -80,16 +80,16 @@ const email= async(req,res,next)=>{
     text: 'and easy to do anywhere, even with Node.js',
     html: '<strong>and easy to do anywhere, even with Node.js</strong>',
   }
-  try{
+  try {
     sgMail
-  .send(msg)
-  .then(() => {
-    console.log('Email sent')
-  })
-  .catch((error) => {
-    console.error(error)
-  })
-  }catch(err){
+      .send(msg)
+      .then(() => {
+        console.log('Email sent')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  } catch (err) {
 
   }
 }

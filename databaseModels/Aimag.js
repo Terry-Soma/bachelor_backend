@@ -2,7 +2,7 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     'Aimag',
     {
-      id: {
+      Id: {
         type: DataTypes.INTEGER.UNSIGNED,
         primaryKey: true,
         allowNull: false,
