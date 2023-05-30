@@ -12,7 +12,6 @@ const passport = require('passport');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 // const {expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
-
 /**
  * Өгөгдлийн баазын моделуудийг баазад үүсгэх
  */
@@ -53,8 +52,8 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use(cors(corsOptions));
-// app.options('*', cors());
+// app.use(cors(corsOptions));
+app.options('*', cors());
 app.use(cookieParser());
 
 /* routes */
@@ -78,6 +77,7 @@ const seederRouter = require('./seeders/index');
 /* error handlers catchError etc ** */
 const AppError = require('./utils/_appError');
 const globalErrorHandler = require('./controllers/_errorHandler');
+
 /* end error handlers */
 
 /* logger  */
@@ -113,24 +113,26 @@ app.use('/api/v1/elsegch', elsegchRouter);
 app.use('/api/v1/komis', komisRouter);
 app.use('/api/v1/views', viewRouter);
 app.use('/api/v1/burtgel', burtgelRouter);
-app.use('/api/v1/createVIEW', async (req, res, next) => {
+app.get('/api/v1/createVIEW', async (req, res, next) => {
   try {
-    await req.sequelize.query(`DROP VIEW IF EXISTS bachelor_backend.allinfo;
+    await req.sequelize.query(`
+   DROP VIEW IF EXISTS bachelor_backend.allinfo;
 
-  CREATE OR REPLACE VIEW bachelor_backend.allinfo AS
-  SELECT s.name AS s_name,
-         h.name AS h_name,
-         m.name AS m_name,
-         m.mergeshil AS mergeshil,
-         h.bosgo_onoo AS bosgo_onoo,
-         m1.MergejilId AS MergejilId,
-         m1.shalguuriin_turul AS shalguuriin_turul,
-         (SELECT string_agg(s1.name, ',') FROM shalguur_medeelel s1 WHERE m1.ShalguurId = s1.Id) AS shalgalt
-  FROM school s
-  JOIN hutulbur h ON s.Id = h.schoolId
-  JOIN mergejil m ON h.Id = m.hutulburId
-  JOIN mergejil_shalguur m1 ON m1.MergejilId = m.Id
-  GROUP BY m.Id, m1.shalguuriin_turul;`
+CREATE OR REPLACE VIEW allinfo AS
+SELECT s.name AS s_name,
+       h.name AS h_name,
+       m.name AS m_name,
+       m.mergeshil AS mergeshil,
+       h.bosgo_onoo AS bosgo_onoo,
+       m1."MergejilId" AS MergejilId,
+       m1.shalguuriin_turul AS shalguuriin_turul,
+       string_agg(s1.name, ',') AS shalgalt
+FROM school s
+JOIN hutulbur h ON s."Id" = h."schoolId"
+JOIN mergejil m ON h."Id" = m."hutulburId"
+JOIN mergejil_shalguur m1 ON m."Id" = m1."MergejilId"
+JOIN shalguur_medeelel s1 ON m1."ShalguurId" = s1."Id"
+GROUP BY s.name, h.name, m.name, m.mergeshil, h.bosgo_onoo, m1."MergejilId", m1.shalguuriin_turul;`
     );
     res.status(200).json({
       status: 'success',

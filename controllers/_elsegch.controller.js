@@ -164,6 +164,7 @@ exports.getElsegchMergejil = asyncHandler(async (req, res, next) => {
 
 exports.rememberMe = asyncHandler(async (req, res, next) => {
   let butDugaar = req.body.butDugaar;
+  console.log('bu', butDugaar)
 
   if (!butDugaar || isNaN(butDugaar)) {
     throw new AppError('БҮТ-ийн дугаараа зөв явуулна уу', 400);
@@ -172,7 +173,7 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
   butDugaar = await req.models.Elsegch.findByPk(butDugaar);
   too = await req.models.Burtgel.count({
     where: {
-      elsegchId: {
+      "elsegchId": {
         [Op.eq]: req.body.butDugaar
       }
     },
@@ -188,15 +189,15 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
   //   group :['elsegchId'],
   //   having : 
   // });
-  const mergejils = await req.sequelize.query(rawQueries.getMergejils, {
-    replacements: [req.body.butDugaar],
-    type: QueryTypes.SELECT,
-  });
+  // const mergejils = await req.sequelize.query(rawQueries.getMergejils, {
+  //   replacements: [req.body.butDugaar],
+  //   type: QueryTypes.SELECT,
+  // });
   res.status(200).json({
     status: 'success',
     butDugaar,
     too,
-    mergejils
+    // mergejils
   });
 });
 
