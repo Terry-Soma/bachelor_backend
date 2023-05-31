@@ -41,7 +41,7 @@ module.exports = {
   inner join mergejil m
   on eb.mergejilId = m.Id
   group by e.burtgel_Id;`,
-  getMergejils: `SELECT GROUP_CONCAT("mergejilId") AS mergejils
+  getMergejils: `SELECT string_agg("mergejilId") AS mergejils
   FROM eburtgel  
   GROUP BY elsegchId
   having elsegchId = ?`,
