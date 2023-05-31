@@ -1,6 +1,6 @@
 const AppError = require('../utils/_appError');
 const asyncHandler = require('../middlewares/_asyncHandler');
-const PQ = require('../utils/_features');
+const factory = require('./factory')
 const sendEmail = require('../utils/_email');
 const rawQueries = require('../config/raw.queries');
 const { QueryTypes, Op } = require('sequelize');
@@ -9,14 +9,10 @@ const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-exports.getAll = asyncHandler(async (req, res, next) => {
-  const data = await req.models.Elsegch.findAll();
+const { Elsegch } = require('./../databaseModels/AllModels')
 
-  res.status(200).json({
-    status: 'success',
-    data,
-  });
-});
+exports.getAll = factory.getAll(Elsegch);
+
 
 exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
   const data = await req.sequelize.query(rawQueries.getAllBurtgel, {
@@ -27,6 +23,9 @@ exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
     data,
   });
 });
+
+exports.getElsegch = factory.getOne(Elsegch);
+
 
 exports.createElsegch = asyncHandler(async (req, res, next) => {
   const elsegch = await req.models.Elsegch.create(req.body);
@@ -52,17 +51,7 @@ exports.createElsegch = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getElsegch = asyncHandler(async (req, res, next) => {
-  const elsegch = await req.models.Elsegch.findByPk(req.params.id);
 
-  if (!elsegch) {
-    throw new AppError(`Id тай элсэгч олдсонгүй ${req.params.id}`, 404);
-  }
-  res.status(200).json({
-    status: 'success',
-    data: elsegch,
-  });
-});
 exports.chooseMergejil = asyncHandler(async (req, res, next) => {
   // const transaction = await req.models.sequelize.transaction();
   // console.log(req.body);
@@ -97,6 +86,7 @@ exports.chooseMergejil = asyncHandler(async (req, res, next) => {
   //   throw new AppError(error, 500);
   // }
 });
+
 exports.updateElsegch = asyncHandler(async (req, res, next) => {
   console.log(req.body)
   const result = await req.models.Elsegch.update(req.body, {
