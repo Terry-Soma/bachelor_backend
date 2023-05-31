@@ -4,6 +4,8 @@ const asyncHandler = require('../middlewares/_asyncHandler');
 const PQ = require('../utils/_features');
 const { QueryTypes } = require('sequelize');
 const rawQueries = require('../config/raw.queries');
+const factory = require('./factory');
+const { Mergejil } = require('./../databaseModels/AllModels')
 exports.getAll = asyncHandler(async (req, res, next) => {
   if (Object.entries(req.params).length === 1) {
     let key = Object.keys(req.params);
@@ -116,30 +118,5 @@ exports.getMergejilWithMoreInfo = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.updateMergejil = asyncHandler(async (req, res, next) => {
-  const result = await req.models.Mergejil.update(req.body, {
-    where: {
-      id: req.params.id,
-    },
-  });
-
-  if (!result) {
-    throw new AppError(`${req.body} ${result}`, 404);
-  }
-
-  res.status(200).json({
-    status: 'success',
-  });
-});
-
-exports.deleteMergejil = asyncHandler(async (req, res, next) => {
-  const mergejil = await req.models.Mergejil.findByPk(req.params.id);
-
-  if (!mergejil) {
-    throw new AppError(`${req.params.id} тэй мэргэжил олдсонгүй `, 404);
-  }
-  await mergejil.destroy();
-  res.status(204).json({
-    status: 'success',
-  });
-});
+exports.updateMergejil = factory.updateOne(Mergejil)
+exports.deleteMergejil = factory.deleteOne(Mergejil)

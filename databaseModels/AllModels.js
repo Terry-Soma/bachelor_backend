@@ -2,6 +2,12 @@ module.exports = {
   Aimag: "Aimag",
   Elsegch: "Elsegch",
   SA: "SA",
-  Users: "Users",
-  Calls: "Calls",
+  Hutulbur: "Hutulbur",
+  Komis: "Komis",
+  Mergejil: "Mergejil",
+  MSH: "MSH",
+  School: "School",
+  Shalguur: "Shalguur",
+  User: "User"
+
 }

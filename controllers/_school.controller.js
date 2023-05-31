@@ -6,7 +6,8 @@ const { QueryTypes } = require('sequelize');
 
 const AppError = require('../utils/_appError');
 const PQ = require('../utils/_features');
-
+const factory = require('./factory');
+const { School } = require('../databaseModels/AllModels');
 exports.getAll = asyncHandler(async (req, res, next) => {
   const { prepared_statement } = new PQ(req.models.School, req.query).exec();
 
@@ -18,17 +19,12 @@ exports.getAll = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.createSchool = asyncHandler(async (req, res, next) => {
-  const school = await req.models.School.create(req.body);
+exports.createSchool = factory.createOne(School);
 
-  if (!school) {
-    throw new AppError('Uusgeh uyd aldaa garlaa', 500);
-  }
-  res.status(201).json({
-    status: 'success',
-    data: school,
-  });
-});
+exports.updateSchool = factory.updateOne(School);
+
+exports.deleteSchool = factory.deleteOne(School);
+// exports.getSchool = factory.getOne(School);
 
 exports.getSchool = asyncHandler(async (req, res, next) => {
   const school = await req.models.School.findByPk(req.params.id, {
@@ -78,32 +74,5 @@ exports.uploadSchoolPhoto = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     data: file.name,
-  });
-});
-exports.updateSchool = asyncHandler(async (req, res, next) => {
-  const result = await req.models.School.update(req.body, {
-    where: {
-      Id: req.params.id,
-    },
-  });
-  if (!result) {
-    throw new AppError(`${req.body} ${result}`, 400);
-  }
-  res.status(201).json({
-    status: 'success',
-  });
-});
-
-exports.deleteSchool = asyncHandler(async (req, res, next) => {
-  let doc = await req.models.School.findByPk(req.params.id);
-
-  if (!doc) {
-    throw new AppError(`${req.params.id} -тай Сургууль олдсонгүй`, 404);
-  }
-  await doc.destroy();
-
-  res.status(204).json({
-    status: 'success',
-    data: null,
   });
 });

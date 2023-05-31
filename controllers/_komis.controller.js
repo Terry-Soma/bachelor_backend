@@ -1,5 +1,8 @@
 const AppError = require('../utils/_appError');
 const asyncHandler = require('../middlewares/_asyncHandler');
+
+const factory = require('./factory');
+const { Komis } = require('./../databaseModels/AllModels')
 exports.getAll = asyncHandler(async (req, res, next) => {
   const komis = await req.models.Komis.findAll({
     include: [
@@ -15,52 +18,7 @@ exports.getAll = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.createKomis = asyncHandler(async (req, res, next) => {
-  const komis = await req.models.Komis.create(req.body);
-
-  if (!komis) {
-    throw new AppError('Aldaa garlaa', 500);
-  }
-  res.status(201).json({
-    status: 'success',
-    data: komis,
-  });
-});
-
-exports.getKomis = asyncHandler(async (req, res, next) => {
-  const komis = await req.models.Komis.findByPk(req.params.id);
-
-  if (!komis) {
-    throw new AppError(`Not found ${req.params.id}`, 404);
-  }
-  res.status(200).json({
-    status: 'success',
-    data: komis,
-  });
-});
-
-exports.updateKomis = asyncHandler(async (req, res, next) => {
-  const komis = await req.models.Komis.findByPk(req.params.id);
-  if (!komis) {
-    throw new AppError(`Not found ${req.params.id}`, 404);
-  }
-
-  await komis.update(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: komis,
-  });
-});
-
-exports.deleteKomis = asyncHandler(async (req, res, next) => {
-  const komis = await req.models.Komis.findByPk(req.params.id);
-  if (!komis) {
-    throw new AppError(`Not found ${req.params.id}`, 404);
-  }
-
-  await komis.destroy();
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-});
+exports.createKomis = factory.createOne(Komis)
+exports.getKomis = factory.getOne(Komis)
+exports.updateKomis = factory.updateOne(Komis)
+exports.deleteKomis = factory.deleteOne(Komis)
