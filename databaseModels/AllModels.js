@@ -1,7 +1,7 @@
 module.exports = {
   Aimag: "Aimag",
   Elsegch: "Elsegch",
-  Products: "Products",
+  SA: "SA",
   Users: "Users",
   Calls: "Calls",
 }

@@ -3,13 +3,10 @@ const AppError = require("../utils/_appError");
 const asyncHandler = require("../middlewares/_asyncHandler");
 const { verifyToken } = require("../utils/_googleOAuth");
 const jwt = require('jsonwebtoken')
-exports.getAll = asyncHandler(async (req, res, next) => {
-  const sa = await req.models.SA.findAll();
-  res.status(200).json({
-    status: "success",
-    data: sa,
-  });
-});
+const factory = require('./factory')
+const { SA } = require('./../databaseModels/AllModels')
+
+exports.getAll = factory.getAll(SA)
 
 exports.createSAlba = asyncHandler(async (req, res, next) => {
   const sa = await req.models.SA.create(req.body);

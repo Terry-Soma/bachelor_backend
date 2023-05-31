@@ -52,9 +52,8 @@ const corsOptions = {
   credentials: true,
 };
 
-// app.use(cors(corsOptions));
 app.use(cors());
-
+app.options('*', cors());
 app.use(cookieParser());
 
 /* routes */
@@ -114,8 +113,6 @@ app.use('/api/v1/elsegch', elsegchRouter);
 app.use('/api/v1/komis', komisRouter);
 app.use('/api/v1/views', viewRouter);
 app.use('/api/v1/burtgel', burtgelRouter);
-
-
 app.get('/api/v1/createVIEW', async (req, res, next) => {
   try {
     await req.sequelize.query(`
