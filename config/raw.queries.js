@@ -41,9 +41,9 @@ module.exports = {
   inner join mergejil m
   on eb.mergejilId = m.Id
   group by e.burtgel_Id;`,
-  getMergejils: `SELECT string_agg("mergejilId") AS mergejils
-  FROM eburtgel  
-  GROUP BY elsegchId
-  having elsegchId = ?`,
+  getMergejils: `SELECT array_to_string(array_agg("mergejilId"), ',') AS mergejils
+  FROM eburtgel
+  WHERE "elsegchId" = ?
+  GROUP BY "elsegchId";`,
 };
 /* end ugugdliin santai shuud haritsah query bairlana i*/
