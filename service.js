@@ -37,7 +37,8 @@ const whitelist = [
   'http://localhost:1234',
   'https://ikh-zasag.netlify.app',
   'https://elselt.ikhzasag.edu.mn',
-  'http://localhost:5173'
+  'http://localhost:5173',
+  "https://main--ikhzasag-test-front.netlify.app/"
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -76,6 +77,7 @@ const seederRouter = require('./seeders/index');
 /* error handlers catchError etc ** */
 const AppError = require('./utils/_appError');
 const globalErrorHandler = require('./controllers/_errorHandler');
+const rawQueries = require('./config/raw.queries');
 
 /* end error handlers */
 
@@ -114,24 +116,9 @@ app.use('/api/v1/views', viewRouter);
 app.use('/api/v1/burtgel', burtgelRouter);
 app.get('/api/v1/createVIEW', async (req, res, next) => {
   try {
-    await req.sequelize.query(`
-   DROP VIEW IF EXISTS bachelor_backend.allinfo;
-
-CREATE OR REPLACE VIEW allinfo AS
-SELECT s.name AS s_name,
-       h.name AS h_name,
-       m.name AS m_name,
-       m.mergeshil AS mergeshil,
-       h.bosgo_onoo AS bosgo_onoo,
-       m1."MergejilId" AS MergejilId,
-       m1.shalguuriin_turul AS shalguuriin_turul,
-       string_agg(s1.name, ',') AS shalgalt
-FROM school s
-JOIN hutulbur h ON s."Id" = h."schoolId"
-JOIN mergejil m ON h."Id" = m."hutulburId"
-JOIN mergejil_shalguur m1 ON m."Id" = m1."MergejilId"
-JOIN shalguur_medeelel s1 ON m1."ShalguurId" = s1."Id"
-GROUP BY s.name, h.name, m.name, m.mergeshil, h.bosgo_onoo, m1."MergejilId", m1.shalguuriin_turul;`
+    await req.sequelize.query(
+      `CREATE OR REPLACE VIEW hutulburview AS
+      select max(case when m1.shalguuriin_turul = 2 then s.name end) AS s_name,max(case when m1.shalguuriin_turul = 2 then h.name end) AS h_name,max(case when m1.shalguuriin_turul = 2 then m.name end) AS m_name,max(case when m1.shalguuriin_turul = 2 then h.bosgo_onoo end) AS bosgo_onoo,max(case when m1.shalguuriin_turul = 2 then m1.MergejilId end) AS MergejilId,max(case when m1.shalguuriin_turul = 2 then m.mergeshil end) AS mergeshil,group_concat(case when m1.shalguuriin_turul = 2 then s1.name end separator ', ') AS shalgalt_2,group_concat(case when m1.shalguuriin_turul = 1 then s1.name end separator ', ') AS shalgalt_1 from ((((school s join hutulbur h on(s.Id = h.schoolId)) join mergejil m on(h.Id = m.hutulburId)) join mergejil_shalguur m1 on(m1.MergejilId =m.Id)) join shalguur_medeelel s1 on(m1.ShalguurId = s1.Id)) group by m.Id;`
     );
     res.status(200).json({
       status: 'success',
@@ -158,7 +145,7 @@ db.sync().then((res) => { console.log(`Өгөгдлийн сангийн хол�
 //   db.sync({ force: true }).then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
 // } else {
 //   console.log('dev  mode'.america);
-//   db.sync().then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...${process.env.NODE_ENV}`.rainbow) }).catch(err => { console.log('first', err) });
+//   db.sync().then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...${ process.env.NODE_ENV }`.rainbow) }).catch(err => { console.log('first', err) });
 // }
 
 /* Unknown url or something
@@ -186,7 +173,7 @@ app.use(globalErrorHandler);
 //   db.sequelize
 //     .sync()
 //     .then((res) => {
-//       console.log(` --->sync hiigdlee`);
+//       console.log(` -- -> sync hiigdlee`);
 //     })
 //     .catch((err) => console.log(err));
 // }
