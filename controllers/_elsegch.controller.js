@@ -4,7 +4,6 @@ const factory = require('./factory')
 const sendEmail = require('../utils/_email');
 const rawQueries = require('../config/raw.queries');
 const { QueryTypes, Op } = require('sequelize');
-const { verifyToken } = require('../utils/_googleOAuth');
 const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -192,27 +191,31 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
 });
 
 exports.googleAuth = asyncHandler(async (req, res, next) => {
-  if (!req.body.token || !req.body.burtgel_Id) {
+  if (!req.body.provider || !req.body.burtgel_Id || !req.body.data) {
     throw new AppError(
       'Уучлаарай таны хүсэлтэнд хариулах зүйл алга. Мэдээллээ шалгаад дахин явуулна уу',
       400
     );
   }
-  let { token } = req.body;
+  let { data, provider } = req.body;
 
-  const result = await verifyToken(token);
-
-  if (!result.email_verified) {
+  if (!data.email_verified || !provider === "google") {
     throw new MyError(
       'Уучлаарай та ямар нэгэн зүйл буруу хийж байна. Хаа саагүй нүд бий шүү',
       403
     );
   }
-  const elsegch = await req.models.Elsegch.create({
-    burtgel_Id: req.body.burtgel_Id,
-    email: result.email,
+
+  const [elsegch, created] = await req.models.Elsegch.findOrCreate({
+    where: { email: data.email },
+    defaults: {
+      email: data.email,
+      burtgel_Id: req.body.burtgel_Id,
+    }
   });
-  if (!elsegch) {
+  console.log('else', elsegch, created)
+
+  if (!created && !elsegch) {
     throw new AppError('Элсэгч үүсгэх үед алдаа гарлаа', 500);
   }
   // 
@@ -222,7 +225,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
   };
   token = jwt.sign(
     {
-      email: result.email,
+      email: data.email,
       burtgel_Id: req.body?.burtgel_Id,
     },
     process.env.JWT_SECRET,
@@ -231,7 +234,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     }
   );
 
-  res.status(200).cookie('ADMIN_TOKEN', token, cookieOption).json({
+  res.status(200).cookie('BurtgelToken', token, cookieOption).json({
     success: true,
     data: elsegch,
   });

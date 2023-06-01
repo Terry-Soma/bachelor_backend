@@ -8,7 +8,6 @@ const morgan = require('morgan');
 const colors = require('colors');
 const xss = require('xss-clean');
 const cors = require('cors');
-const passport = require('passport');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 // const {expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
@@ -38,6 +37,7 @@ const whitelist = [
   'http://localhost:1234',
   'https://ikh-zasag.netlify.app',
   'https://elselt.ikhzasag.edu.mn',
+  'http://localhost:5173'
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -52,8 +52,7 @@ const corsOptions = {
   credentials: true,
 };
 
-app.use(cors());
-app.options('*', cors());
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 /* routes */

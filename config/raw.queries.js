@@ -9,7 +9,7 @@ module.exports = {
   inner join mergejil as m
   on m.hutulburId = h.Id
   group by s.name;`,
-  allInfo: 'select * from allinfo',
+  allInfo: "SELECT * FROM `hutulburview`;",
   burtgelInfo: `select e.elsegchId,
   (select group_concat(m.name)) as "mergejil", 
   el.lname,el.fname,el.email, el.rd, el.gerchilgee_dugaar, el.img, el.utas, a.ner as "aimag"
@@ -41,7 +41,7 @@ module.exports = {
   inner join mergejil m
   on eb.mergejilId = m.Id
   group by e.burtgel_Id;`,
-  getMergejils: `SELECT GROUP_CONCAT("mergejilId") AS mergejils
+  getMergejils: `SELECT GROUP_CONCAT(mergejilId) AS mergejils
   FROM eburtgel  
   GROUP BY elsegchId
   having elsegchId = ?`,
