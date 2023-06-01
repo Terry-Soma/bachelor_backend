@@ -40,20 +40,25 @@ const whitelist = [
   'http://localhost:5173',
   "https://main--ikhzasag-test-front.netlify.app/"
 ];
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   allowedHeaders: 'Authorization, Set-Cookie, Content-Type',
+//   methods: 'GET, POST, PUT,PATCH, DELETE',
+//   credentials: true,
+// };
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (origin === undefined || whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  allowedHeaders: 'Authorization, Set-Cookie, Content-Type',
-  methods: 'GET, POST, PUT,PATCH, DELETE',
+  origin: '*',
   credentials: true,
-};
-
-app.use(cors(corsOptions));
+  optionSuccessStatus: 200
+}
+app.use(cors(corsOptions))
+// app.use(cors(corsOptions));
 app.use(cookieParser());
 
 /* routes */
