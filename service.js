@@ -30,7 +30,6 @@ app.use(express.static(`${__dirname}/public`));
 app.use(
   express.static(path.join(__dirname, "/public/build"))
 );
-app.use(xss());
 
 const whitelist = [
   'http://localhost:3000',
@@ -57,7 +56,10 @@ const corsOptions = {
   credentials: true,
   optionSuccessStatus: 200
 }
-app.use(cors(corsOptions))
+app.use(cors())
+
+
+app.use(xss());
 // app.use(cors(corsOptions));
 app.use(cookieParser());
 
