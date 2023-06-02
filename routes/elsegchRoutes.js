@@ -10,6 +10,7 @@ router
 router.route('/withMergejil').get(elsegchController.getAllElsegchWithMergejil);
 
 router.route('/remember-me').post(elsegchController.rememberMe);
+router.route('/logout').post(elsegchController.logout);
 
 router
   .route('/:id')
@@ -18,7 +19,7 @@ router
   .delete(elsegchController.deleteElsegch);
 
 router.route('/:id/mergejils/:mergejilId').delete(elsegchController.deleteElsegchMergejil);
-  
+
 router.route('/:id/mergejil').get(elsegchController.getElsegchMergejil);
 router.route('/mergejil').post(elsegchController.chooseMergejil);
 router.route('/google').post(elsegchController.googleAuth);
