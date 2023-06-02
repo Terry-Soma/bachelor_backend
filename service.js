@@ -6,8 +6,8 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const colors = require('colors');
-const xss = require('xss-clean');
 const cors = require('cors');
+const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 // const {expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
@@ -57,9 +57,7 @@ const corsOptions = {
   optionSuccessStatus: 200
 }
 app.use(cors())
-
-
-app.use(xss());
+app.use(helmet());
 // app.use(cors(corsOptions));
 app.use(cookieParser());
 
