@@ -254,3 +254,7 @@ exports.deleteElsegchMergejil = asyncHandler(async (req, res, next) => {
     status: 'success',
   });
 })
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.clearCookie('BurtgelToken')
+  res.redirect('/');
+})
