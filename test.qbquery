@@ -1,0 +1,19 @@
+﻿SELECT distinct
+    MAX(CASE WHEN m1.shalguuriin_turul = 1 THEN s.name END) AS s_name,
+    MAX(CASE WHEN m1.shalguuriin_turul = 1 THEN h.name END) AS h_name,
+    MAX(CASE WHEN m1.shalguuriin_turul = 1 THEN m.name END) AS m_name,
+    MAX(CASE WHEN m1.shalguuriin_turul = 1 THEN h.bosgo_onoo END) AS bosgo_onoo,
+    MAX(CASE WHEN m1.shalguuriin_turul = 1 THEN m1.MergejilId END) AS MergejilId,
+    GROUP_CONCAT(CASE WHEN m1.shalguuriin_turul = 1 THEN s1.name END SEPARATOR ',') AS shalgalt_1,
+    GROUP_CONCAT(CASE WHEN m1.shalguuriin_turul = 2 THEN s1.name END SEPARATOR ',') AS shalgalt_2
+FROM
+    school s
+    JOIN hutulbur h ON s.Id = h.schoolId
+    JOIN mergejil m ON h.Id = m.hutulburId
+    JOIN mergejil_shalguur m1 ON m1.MergejilId = m.Id
+    JOIN shalguur_medeelel s1 ON m1.ShalguurId = s1.Id
+GROUP BY
+    m.Id;
+
+
+#MAX(CASE WHEN m1.shalguuriin_turul = 1 THEN m1.shalguuriin_turul END) AS shalguuriin_turul,
