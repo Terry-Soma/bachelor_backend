@@ -6,7 +6,8 @@ const rawQueries = require('../config/raw.queries');
 const { QueryTypes, Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 
-const { Elsegch } = require('./../databaseModels/AllModels')
+const { Elsegch, Mergejil, Hutulbur } = require('./../databaseModels/AllModels');
+const sequelize = require('sequelize');
 
 exports.getAll = factory.getAll(Elsegch);
 
@@ -95,8 +96,15 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
 });
 
 exports.approveMergejil = asyncHandler(async (req,res,next)=>{
-  console.log(req.body);
+  let mergejils = req.body.mer.sort((a,b)=> a-b)   
+  console.log(mergejils);
 
+  // where function
+  const result = await req.sequelize.query(rawQueries.approveMethod, {
+    replacements: {values: mergejils },
+    type: sequelize.QueryTypes.SELECT
+  })
+  console.log(result)
   res.status(200).json({
     status: 'success',
     message: "Hello"
@@ -176,6 +184,7 @@ exports.rememberMe = asyncHandler(async (req, res, next) => {
 });
 
 exports.googleAuth = asyncHandler(async (req, res, next) => {
+  console.log(req.body)
   if (!req.body.provider || !req.body.burtgel_Id || !req.body.data) {
     throw new AppError(
       'Уучлаарай таны хүсэлтэнд хариулах зүйл алга. Мэдээллээ шалгаад дахин явуулна уу',
