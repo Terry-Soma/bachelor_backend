@@ -40,6 +40,8 @@ const komis = JSON.parse(
   fs.readFileSync(__dirname + '/../dev_data/komis.json', 'utf-8')
 );
 const importData = _asyncHandler(async (req, res, next) => {
+  console.log(req.sequelize)
+
   await req.models.Aimag.bulkCreate(aimag);
   await req.models.Shalguur.bulkCreate(shalguur);
   await req.models.School.bulkCreate(school);
