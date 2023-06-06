@@ -40,6 +40,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.CHAR(8),
         allowNull: true,
       },
+      approved: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       aimag_id: {
         type: DataTypes.INTEGER(10).UNSIGNED,
         allowNull: true,

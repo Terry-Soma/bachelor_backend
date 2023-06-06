@@ -1,4 +1,4 @@
-exports.template = (data)=> {
+exports.template = (data, elsegch)=> {
     let html = `<!DOCTYPE html>
     <html lang="en">
     
@@ -78,23 +78,26 @@ exports.template = (data)=> {
           <h1>Их засаг олон улсын сургууль</h1>
           <h1>ИЗОУИС</h1>
           <div class="personal__information">
-            <h4>Lorem ipsum овогтой Lorem, ipsum. таньд энэ өдрийн мэнд хүргэе</h4>
+            <h4>${elsegch.fname} овогтой ${elsegch.lname} таньд энэ өдрийн мэнд хүргэе.</h4>
             <div class="choosed__study">
-              <h5>Таны сонгосон мэргэжлүүд</h5>
+              <h5>Таны сонгосон мэргэжлүүдийг баталгаажуулж байна.</h5>
               <table>
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>Сургуулийн нэр</th>
                     <th>Мэргэжлийн нэр</th>
+                    <th>Хөтөлбөрийн нэр</th>
+
                   </tr>
                 </thead>
                 <tbody>
                     ${data.map((el,index)=>{
                         return `<tr>
                         <td>${index + 1}</td>
-                        <td>${el.sname}</td>
-                        <td>${el.mname}</td>
+                        <td>${el.school}</td>
+                        <td>${el.mergejil}</td>
+                        <td>${el.hutulbur}</td>
                       </tr>`
                     })}
                   

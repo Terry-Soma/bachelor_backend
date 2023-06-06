@@ -1,12 +1,12 @@
 const AppError = require('../utils/_appError');
 const asyncHandler = require('../middlewares/_asyncHandler');
 const factory = require('./factory')
-const sendEmail = require('../utils/_email');
+const {sendEmail} = require('./../utils/_email')
 const rawQueries = require('../config/raw.queries');
 const { QueryTypes, Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 
-const { Elsegch, Mergejil, Hutulbur } = require('./../databaseModels/AllModels');
+const { Elsegch, } = require('./../databaseModels/AllModels');
 const sequelize = require('sequelize');
 
 exports.getAll = factory.getAll(Elsegch);
@@ -96,15 +96,51 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
 });
 
 exports.approveMergejil = asyncHandler(async (req,res,next)=>{
-  let mergejils = req.body.mer.sort((a,b)=> a-b)   
-  console.log(mergejils);
+  let {mergejils, butDugaar} =req.body
+  if(!mergejils | !butDugaar){
+    throw new AppError("Та үйлдлээ шалгаад дахин илгээнэ үү ",400);
+  }
+  mergejils = mergejils.sort((a,b)=> a-b)
+
+  let elsegch  = await req.models.Elsegch.findByPk(butDugaar);
+  if(!elsegch){
+    throw new AppError("Таны хайсан зүйл олдсонгүй",404)
+  }
+  elsegch = elsegch.dataValues;
+  
 
   // where function
-  const result = await req.sequelize.query(rawQueries.approveMethod, {
+  const data = await req.sequelize.query(rawQueries.approveMethod, {
     replacements: {values: mergejils },
     type: sequelize.QueryTypes.SELECT
   })
-  console.log(result)
+
+//send mail
+try {
+ let result =  await sendEmail(data, elsegch);
+ if("messageIds" in result){ 
+  // approved 
+  console.log("error")
+
+ const updatedRes = await  req.models.Elsegch.update({
+    approved: true
+  }, {
+    where: {
+      burtgel_Id: req.params.id,
+    },
+  })
+
+
+
+console.log(updatedRes)
+
+}
+
+  
+ 
+} catch (error) {
+  console.log(error)
+}
   res.status(200).json({
     status: 'success',
     message: "Hello"

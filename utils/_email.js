@@ -1,10 +1,12 @@
-const apikey = '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'
+const apikey = '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'
 var SibApiV3Sdk = require('sib-api-v3-sdk');
 SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = apikey;
 const {template} = require('./_emailTemplate')
 
-exports.sendEmail = (emailData) =>
-new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
+exports.sendEmail = (emailData, elsegch) => {
+  const emailApi = new SibApiV3Sdk.TransactionalEmailsApi();
+  
+ return  emailApi.sendTransacEmail({
 
   "sender": { "email": "Jakleito70@gmail.com", "name": "Jargalsaikhan" },
   "subject": "Их засаг олон улсын их сургууль",
@@ -24,8 +26,6 @@ new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
       <tr>
         <td align="center">
           <h1>Welcome to My Website!</h1>
-          <p>This is a paragraph of text.</p>
-          <img src="image.jpg" alt="My Image" style="max-width: 100%;">
         </td>
       </tr>
     </table>
@@ -38,19 +38,16 @@ new SibApiV3Sdk.TransactionalEmailsApi().sendTransacEmail({
   "messageVersions": [
     //Definition for Message Version 1 
     {
-      "to": [
+      "to": [ 
         {
-          "email": "jakleito70@gmail.com",
-          "name": "mr jak"
-        },
-        {
-          "email": "anhaabaatar1214@gmail.com",
-          "name": "Anhaabaatar"
+          "email": elsegch.email,
+          "name": elsegch.fname
         }
       ],
-      "htmlContent": template(emailData),
+      "htmlContent": template(emailData, elsegch),
       "subject": "Таны бүртгэлийн мэдээллийг баталгаажууллаа."
     },
   ]
 
 })
+}
