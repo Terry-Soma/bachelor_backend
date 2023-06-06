@@ -16,6 +16,7 @@ router
   .route('/:id')
   .get(elsegchController.getElsegch)
   .patch(elsegchController.updateElsegch)
+  .put(elsegchController.approveMergejil)
   .delete(elsegchController.deleteElsegch);
 
 router.route('/:id/mergejils/:mergejilId').delete(elsegchController.deleteElsegchMergejil);

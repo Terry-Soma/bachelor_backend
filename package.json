@@ -17,7 +17,6 @@
   "author": "IKHZASAG",
   "license": "ISC",
   "dependencies": {
-    "@sendgrid/mail": "^7.7.0",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -31,7 +30,11 @@
     "nodemailer": "^6.7.5",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",
+    "sib-api-v3-sdk": "^8.5.0",
     "validator": "^13.7.0",
     "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }

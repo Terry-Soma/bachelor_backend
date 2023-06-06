@@ -5,8 +5,6 @@ const sendEmail = require('../utils/_email');
 const rawQueries = require('../config/raw.queries');
 const { QueryTypes, Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const { Elsegch } = require('./../databaseModels/AllModels')
 
@@ -26,29 +24,7 @@ exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
 exports.getElsegch = factory.getOne(Elsegch);
 
 
-exports.createElsegch = asyncHandler(async (req, res, next) => {
-  const elsegch = await req.models.Elsegch.create(req.body);
-  if (!elsegch) {
-    throw new AppError(`Error with ${req.body}`, 400);
-  }
-
-  // const message = `<h1>Сайн байна уу ${elsegch.lname} овогтой ${elsegch.fname} таньд энэ өдрийн мэнд хүргэе </h1><br> Таны бүртгэлийг баталгаажууллаа. Та манай их сургуулийн мэргэжлүүдээс өөрийн элсэх боломжтой мэргэжлүүдийг харахыг хүсвэл <a target="_blank" href="">ЭНД ДАРНА УУ</a> <br> <p>Таныг хүссэн мэргэжлээ сонгоно гэж итгэж байна. Таньд амжилт хүсье.....</p>`;
-  // try {
-  //   await sendEmail({
-  //     email: elsegch.email,
-  //     subject: 'Бүртгэл амжилттай үүслээ',
-  //     message,
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  //   throw new AppError(error, 500);
-  // }
-
-  res.status(201).json({
-    status: 'success',
-    data: elsegch,
-  });
-});
+exports.createElsegch =factory.createOne(Elsegch)
 
 
 exports.chooseMergejil = asyncHandler(async (req, res, next) => {
@@ -97,26 +73,35 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
     throw new AppError(`aldaa ${result}`, 404);
   }
 
-  const html = `<h1>Сайн байна уу ${req.body.lname} овогтой ${req.body.fname} таньд энэ өдрийн мэнд хүргэе </h1><br> Таны бүртгэлийг баталгаажууллаа. Та манай их сургуулийн мэргэжлүүдээс өөрийн хүссэн мэргэжилд бүртгүүлэн ЭЕШ-ын дүн гарсны дараа элсэх боломжтой...   <br> <p>Таныг хүссэн мэргэжлээ сонгоно гэж итгэж байна. Таньд амжилт хүсье.....</p>`;
-  const msg = {
-    to: req.body.email,
-    from: process.env.EMAIL_FROM,
-    subject: 'Их Засаг олон улсын их сургууль',
-    text: 'Таны бүртгэл амжилттай баталгаажлаа',
-    html
-  }
-  try {
-    await sgMail.send(msg);
-    console.log("amjilttai")
-  } catch (error) {
-    console.log(error);
-    throw new AppError(error, 500);
-  }
+  // const html = `<h1>Сайн байна уу ${req.body.lname} овогтой ${req.body.fname} таньд энэ өдрийн мэнд хүргэе </h1><br> Таны бүртгэлийг баталгаажууллаа. Та манай их сургуулийн мэргэжлүүдээс өөрийн хүссэн мэргэжилд бүртгүүлэн ЭЕШ-ын дүн гарсны дараа элсэх боломжтой...   <br> <p>Таныг хүссэн мэргэжлээ сонгоно гэж итгэж байна. Таньд амжилт хүсье.....</p>`;
+  // const msg = {
+  //   to: req.body.email,
+  //   from: process.env.EMAIL_FROM,
+  //   subject: 'Их Засаг олон улсын их сургууль',
+  //   text: 'Таны бүртгэл амжилттай баталгаажлаа',
+  //   html
+  // }
+  // try {
+  //   await sgMail.send(msg);
+  //   console.log("amjilttai")
+  // } catch (error) {
+  //   console.log(error);
+  //   throw new AppError(error, 500);
+  // }
   res.status(200).json({
     status: 'success',
     result
   });
 });
+
+exports.approveMergejil = asyncHandler(async (req,res,next)=>{
+  console.log(req.body);
+
+  res.status(200).json({
+    status: 'success',
+    message: "Hello"
+  });
+})
 
 exports.deleteElsegch = asyncHandler(async (req, res, next) => {
   const result = await req.models.Elsegch.findByPk(req.params.id);
@@ -200,7 +185,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
   let { data, provider } = req.body;
 
   if (!data.email_verified || !provider === "google") {
-    throw new MyError(
+    throw new AppError(
       'Уучлаарай та ямар нэгэн зүйл буруу хийж байна. Хаа саагүй нүд бий шүү',
       403
     );
