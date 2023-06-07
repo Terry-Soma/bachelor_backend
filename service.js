@@ -132,7 +132,7 @@ app.get('/api/v1/createVIEW', async (req, res, next) => {
 /* EndROUTES */
 
 app.use('/api/v1/', (req, res, next) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/build/index.html');
 });
 
 
