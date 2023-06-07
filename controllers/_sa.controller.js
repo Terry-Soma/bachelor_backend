@@ -22,7 +22,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
 
 
   if (!data.email_verified || !provider === "google") {
-    throw new MyError(
+    throw new AppError(
       'Уучлаарай та ямар нэгэн зүйл буруу хийж байна. Хаа саагүй нүд бий шүү',
       403
     );

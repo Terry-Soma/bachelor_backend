@@ -115,7 +115,8 @@ app.use('/api/v1/burtgel', burtgelRouter);
 app.get('/api/v1/createVIEW', async (req, res, next) => {
   try {
     await req.sequelize.query(
-      `SELECT 
+      `CREATE VIEW hutulburView AS
+      SELECT 
       MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN s.name END) AS s_name,
       MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN h.name END) AS h_name,
       MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN m.name END) AS m_name,
@@ -130,7 +131,10 @@ app.get('/api/v1/createVIEW', async (req, res, next) => {
       JOIN mergejil m ON h.id = m.hutulburId
       JOIN mergejil_shalguur m1 ON m1.MergejilId = m.id
       JOIN shalguur_medeelel s1 ON m1.ShalguurId = s1.Id
-    GROUP BY m.id;`
+    GROUP BY m.id;
+    DROP VIEW IF EXISTS elsegchinfoview;
+CREATE elsegchinfoview AS select e.burtgel_Id AS burtgel_Id,concat(e.lname," ",e.fname) AS ovog_ner,e.email AS email,e.rd AS rd,e.utas AS utas,group_concat(m.name separator ", ") AS songoson_mergejil,a.ner AS aimag_ner from (((elsegch e join aimag a on(a.Id = e.aimag_id)) join eburtgel eb on(eb.elsegchId = e.burtgel_Id)) join mergejil m on(m.id = eb.mergejilId)) group by e.burtgel_Id;
+`
     );
     res.status(200).json({
       status: 'success',
@@ -152,13 +156,6 @@ app.use('/api/v1/', (req, res, next) => {
 
 console.log('pro', process.env.NODE_ENV)
 db.sync({}).then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
-// if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'production') {
-//   console.log('production mode');
-//   db.sync({ force: true }).then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
-// } else {
-//   console.log('dev  mode'.america);
-//   db.sync().then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...${ process.env.NODE_ENV }`.rainbow) }).catch(err => { console.log('first', err) });
-// }
 
 /* Unknown url or something
  404 page
@@ -172,22 +169,5 @@ app.get("*", (req, res) => {
 
 
 app.use(globalErrorHandler);
-
-
-// if (process.env.NODE_ENV === 'force' || process.env.NODE_ENV === 'production') {
-//   db.sequelize
-//     .sync({ force: true })
-//     .then((res) => {
-//       console.log(`sync hiigdlee`);
-//     })
-//     .catch((err) => console.log(err));
-// } else {
-//   db.sequelize
-//     .sync()
-//     .then((res) => {
-//       console.log(` -- -> sync hiigdlee`);
-//     })
-//     .catch((err) => console.log(err));
-// }
 
 module.exports = app;

@@ -10,17 +10,14 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 
   if (!token) {
-    throw new MyError(
-      'Энэ үйлдлийг хийхэд таны эрх хүрэхгүй байна. Та эхлээд логин хийнэ үү.Cookie ашиглан токеноо дамжуулна уу.',
+    throw new AppError(
+      'Энэ үйлдлийг хийхэд таны эрх хүрэхгүй байна. Та эхлээд логин хийнэ үү.',
       401
     );
   }
 
   const tokenObj = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(tokenObj);
-  req.burtgel_Id = tokenObj.burtgel_Id;
+  req.SA_Id = tokenObj.SA_Id;
   req.email = tokenObj.email;
-  //   req.userId = tokenObj.id;
-  //   req.userRole = tokenObj.role;
   next();
 });
