@@ -10,6 +10,7 @@ const cors = require('cors');
 // const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+const logger = require('./utils/_logger');
 // const {expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 /**
  * Өгөгдлийн баазын моделуудийг баазад үүсгэх
@@ -88,18 +89,9 @@ const rawQueries = require('./config/raw.queries');
 /* end error handlers */
 
 /* logger  */
-if (process.env.NODE_ENV == 'dev') {
-  app.use(morgan('dev'));
-  app.use(
-    morgan('common', {
-      stream: fs.createWriteStream(path.join(__dirname, '/logs/access.log'), {
-        flags: 'a',
-      }),
-    })
-  );
-}
 app.use(fileUpload());
 app.use(injectDB(db));
+app.use(logger)
 
 /* index */
 
