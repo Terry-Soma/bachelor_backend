@@ -2,7 +2,7 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     'School',
     {
-      Id: {
+      id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
@@ -16,7 +16,7 @@ module.exports = function (sequelize, DataTypes) {
       slug: {
         type: DataTypes.STRING(),
         allowNull: false,
-      }, 
+      },
       link: {
         type: DataTypes.STRING(400),
         allowNull: true,
@@ -40,7 +40,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       tableName: 'school',
-      timestamps: true /* created updated */,
+      timestamps: false /* created updated */,
     }
   );
 };

@@ -2,7 +2,7 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     'User',
     {
-      Id: {
+      id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
@@ -30,7 +30,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       tableName: 'user',
-      timestamps: true /* created updated */,
+      timestamps: false /* created updated */,
     }
   );
 };

@@ -13,7 +13,7 @@ module.exports = function (sequilze, DataTypes) {
         allowNull: false,
         references: {
           model: 'user',
-          key: 'Id',
+          key: 'id',
         },
       },
       s_alba_id: {
@@ -39,7 +39,7 @@ module.exports = function (sequilze, DataTypes) {
     },
     {
       tableName: 'komis',
-      timestamps: true,
+      timestamps: false,
     }
   );
 };

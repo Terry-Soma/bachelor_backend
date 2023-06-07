@@ -1,7 +1,7 @@
 const AppError = require('../utils/_appError');
 const asyncHandler = require('../middlewares/_asyncHandler');
 const factory = require('./factory')
-const {sendEmail} = require('./../utils/_email')
+const { sendEmail } = require('./../utils/_email')
 const rawQueries = require('../config/raw.queries');
 const { QueryTypes, Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
@@ -25,7 +25,7 @@ exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
 exports.getElsegch = factory.getOne(Elsegch);
 
 
-exports.createElsegch =factory.createOne(Elsegch)
+exports.createElsegch = factory.createOne(Elsegch)
 
 
 exports.chooseMergejil = asyncHandler(async (req, res, next) => {
@@ -95,60 +95,55 @@ exports.updateElsegch = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.approveMergejil = asyncHandler(async (req,res,next)=>{
-  let {mergejils, butDugaar} =req.body
-  if(!mergejils | !butDugaar){
-    throw new AppError("Та үйлдлээ шалгаад дахин илгээнэ үү ",400);
+exports.approveMergejil = asyncHandler(async (req, res, next) => {
+  let { mergejils, butDugaar } = req.body
+  if (!mergejils | !butDugaar) {
+    throw new AppError("Та үйлдлээ шалгаад дахин илгээнэ үү ", 400);
   }
-  mergejils = mergejils.sort((a,b)=> a-b)
+  mergejils = mergejils.sort((a, b) => a - b)
 
-  let elsegch  = await req.models.Elsegch.findByPk(butDugaar);
-  if(!elsegch){
-    throw new AppError("Таны хайсан зүйл олдсонгүй",404)
+  let elsegch = await req.models.Elsegch.findByPk(butDugaar);
+  if (!elsegch) {
+    throw new AppError("Таны хайсан зүйл олдсонгүй", 404)
   }
   elsegch = elsegch.dataValues;
-  
+
 
   // where function
   const data = await req.sequelize.query(rawQueries.approveMethod, {
-    replacements: {values: mergejils },
+    replacements: { values: mergejils },
     type: sequelize.QueryTypes.SELECT
   })
 
-//send mail
-try {
- let result =  await sendEmail(data, elsegch);
- if("messageIds" in result){ 
-  // approved 
-  console.log("error")
+  //send mail\
+  let result = await sendEmail(data, elsegch);
+  if ("messageIds" in result) {
+    // approved 
+    console.log("error")
 
- const updatedRes = await  req.models.Elsegch.update({
-    approved: true
-  }, {
-    where: {
-      burtgel_Id: req.params.id,
-    },
-  })
+    const updatedRes = await req.models.Elsegch.update({
+      approved: true
+    }, {
+      where: {
+        burtgel_Id: req.params.id,
+      },
+    })
+    if (updatedRes) {
+      res.status(200).json({
+        status: 'success',
+        message: "Hello"
+      });
+    }
 
-  res.status(200).json({
-    status: 'success',
-    message: "Hello"
-  });
+    res.status(200).json({
+      status: 'success',
+      message: "Алдаа гарлаа"
+    });
 
-console.log(updatedRes)
+    console.log(updatedRes)
 
-}
+  }
 
-  
- 
-} catch (error) {
-  console.log(error)
-  res.status(500).json({
-    status: 'success',
-    message: "Hello"
-  });
-}
-  
 })
 
 exports.deleteElsegch = asyncHandler(async (req, res, next) => {

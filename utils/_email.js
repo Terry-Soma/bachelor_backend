@@ -1,4 +1,4 @@
-const apikey = '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'
+const apikey = ''
 var SibApiV3Sdk = require('sib-api-v3-sdk');
 SibApiV3Sdk.ApiClient.instance.authentications['api-key'].apiKey = apikey;
 const { template } = require('./_emailTemplate')
@@ -30,12 +30,8 @@ exports.sendEmail = (emailData, elsegch) => {
     </table>
   </body>
   </html>`,
-    // "params": {
-    //   "greeting": "This is the default greeting",
-    //   "headline": "This is the default headline"
-    // },
+
     "messageVersions": [
-      //Definition for Message Version 1 
       {
         "to": [
           {

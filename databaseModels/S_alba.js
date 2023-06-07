@@ -17,7 +17,7 @@ module.exports = function (sequilze, DataTypes) {
     },
     {
       tableName: 's_alba',
-      timestamps: true,
+      timestamps: false,
     }
   );
 };

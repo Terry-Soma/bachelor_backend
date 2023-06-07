@@ -1,6 +1,6 @@
 [
     {
-        "Id": 9,
+        "id": 9,
         "name": "ҮНДЭСНИЙ ИНЖЕНЕР ТЕХНОЛОГИЙН СУРГУУЛЬ",
         "slug": "ҮИТС",
         "img": "photo_1.jpeg",
@@ -12,7 +12,7 @@
         "updatedAt": "2022-03-20T12:36:22.000Z"
     },
     {
-        "Id": 2,
+        "id": 2,
         "name": "ИХ ЗАСАГ ХУУЛЬ ЗҮЙН СУРГУУЛЬ",
         "slug": "ХЗС",
         "link": "https://sites.google.com/ikhzasag.edu.mn/iziu-eze/%D1%8D%D1%80%D1%85-%D0%B7%D2%AF%D0%B9-%D1%8D%D1%87%D0%BD%D1%8D%D1%8D",
@@ -24,7 +24,7 @@
         "updatedAt": "2022-03-20T11:11:14.000Z"
     },
     {
-        "Id": 3,
+        "id": 3,
         "name": "АНАГААХ УХААНЫ СУРГУУЛЬ",
         "slug": "АУС",
         "link": "https://sites.google.com/ikhzasag.edu.mn/izius-auis/%D0%BD%D2%AF%D2%AF%D1%80",
@@ -36,7 +36,7 @@
         "updatedAt": "2022-03-20T12:33:09.000Z"
     },
     {
-        "Id": 4,
+        "id": 4,
         "name": "Шинжлэх ухааны сургууль",
         "slug": "ШУС",
         "img": "photo_4.png",
@@ -47,7 +47,7 @@
         "updatedAt": "2022-03-20T12:33:45.000Z"
     },
     {
-        "Id": 5,
+        "id": 5,
         "name": "САНХҮҮ ЭДИЙН ЗАСГИЙН СУРГУУЛЬ",
         "slug": "СЭЗС",
         "img": "photo_5.jpeg",
@@ -59,7 +59,7 @@
         "updatedAt": "2022-03-20T12:34:15.000Z"
     },
     {
-        "Id": 6,
+        "id": 6,
         "name": "ИХ ЗАСАГ МЭРГЭЖИЛ СУРГАЛТЫН ҮЙЛДВЭРЛЭЛИЙН ТӨВ",
         "slug": "МСҮТ",
         "img": "photo_6.jpeg",
@@ -70,7 +70,7 @@
         "updatedAt": "2022-03-20T12:34:46.000Z"
     },
     {
-        "Id": 7,
+        "id": 7,
         "name": "БОЛОВСРОЛ СОЁЛ УРЛАГИЙН СУРГУУЛЬ",
         "slug": "БСУС",
         "link": "https://sites.google.com/ikhzasag.edu.mn/bsus/%D0%BD%D2%AF%D2%AF%D1%80",
@@ -82,7 +82,7 @@
         "updatedAt": "2022-03-20T12:35:13.000Z"
     },
     {
-        "Id": 8,
+        "id": 8,
         "name": "ЧИНГИС СООСЭ ОЛОН УЛСЫН ХАРИЛЦАА",
         "slug": "СООСЭ",
         "link": "https://sites.google.com/ikhzasag.edu.mn/iziu-soose/%D0%BD%D2%AF%D2%AF%D1%80",
@@ -94,7 +94,7 @@
         "updatedAt": "2022-03-20T12:35:55.000Z"
     },
     {
-        "Id": 10,
+        "id": 10,
         "name": "ДҮРСЛЭХ УРЛАГ ДИЗАЙН ТЕХНОЛОГИЙН СУРГУУЛЬ",
         "slug": "ДУДТС",
         "link": "https://design-art.edu.mn/",
@@ -106,7 +106,7 @@
         "updatedAt": "2022-03-20T12:36:48.000Z"
     },
     {
-        "Id": 11,
+        "id": 11,
         "name": "ЖЭСАН ЧИНГИС ХААН ГАДААД ХЭЛ СОЁЛЫН СУРГУУЛЬ",
         "slug": "ЖЧХГХСС",
         "link": "https://sites.google.com/ikhzasag.edu.mn/iziu-jesan/%D0%BD%D2%AF%D2%AF%D1%80",

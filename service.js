@@ -115,8 +115,22 @@ app.use('/api/v1/burtgel', burtgelRouter);
 app.get('/api/v1/createVIEW', async (req, res, next) => {
   try {
     await req.sequelize.query(
-      `CREATE OR REPLACE VIEW hutulburview AS
-      select max(case when m1.shalguuriin_turul = 2 then s.name end) AS s_name,max(case when m1.shalguuriin_turul = 2 then h.name end) AS h_name,max(case when m1.shalguuriin_turul = 2 then m.name end) AS m_name,max(case when m1.shalguuriin_turul = 2 then h.bosgo_onoo end) AS bosgo_onoo,max(case when m1.shalguuriin_turul = 2 then m1.MergejilId end) AS MergejilId,max(case when m1.shalguuriin_turul = 2 then m.mergeshil end) AS mergeshil,group_concat(case when m1.shalguuriin_turul = 2 then s1.name end separator ', ') AS shalgalt_2,group_concat(case when m1.shalguuriin_turul = 1 then s1.name end separator ', ') AS shalgalt_1 from ((((school s join hutulbur h on(s.Id = h.schoolId)) join mergejil m on(h.Id = m.hutulburId)) join mergejil_shalguur m1 on(m1.MergejilId =m.Id)) join shalguur_medeelel s1 on(m1.ShalguurId = s1.Id)) group by m.Id;`
+      `SELECT 
+      MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN s.name END) AS s_name,
+      MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN h.name END) AS h_name,
+      MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN m.name END) AS m_name,
+      MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN h.bosgo_onoo END) AS bosgo_onoo,
+      MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN m1.MergejilId END) AS MergejilId,
+      MAX(CASE WHEN m1.shalguuriin_turul = 2 THEN m.mergeshil END) AS mergeshil,
+      GROUP_CONCAT(CASE WHEN m1.shalguuriin_turul = 2 THEN s1.name END SEPARATOR ', ') AS shalgalt_2,
+      GROUP_CONCAT(CASE WHEN m1.shalguuriin_turul = 1 THEN s1.name END SEPARATOR ', ') AS shalgalt_1
+    FROM 
+      school s
+      JOIN hutulbur h ON s.id = h.schoolId
+      JOIN mergejil m ON h.id = m.hutulburId
+      JOIN mergejil_shalguur m1 ON m1.MergejilId = m.id
+      JOIN shalguur_medeelel s1 ON m1.ShalguurId = s1.Id
+    GROUP BY m.id;`
     );
     res.status(200).json({
       status: 'success',
@@ -137,7 +151,7 @@ app.use('/api/v1/', (req, res, next) => {
 
 
 console.log('pro', process.env.NODE_ENV)
-db.sync().then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
+db.sync({}).then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });
 // if (process.env.NODE_ENV == 'production' || process.env.NODE_ENV == 'production') {
 //   console.log('production mode');
 //   db.sync({ force: true }).then((res) => { console.log(`Өгөгдлийн сангийн холболтыг амжилттай холболоо...`.rainbow) }).catch(err => { console.log('first', err) });

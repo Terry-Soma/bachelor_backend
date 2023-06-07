@@ -20,7 +20,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         references: {
           model: 'mergejil',
-          key: 'Id',
+          key: 'id',
         },
       },
       ShalguurId: {
@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       tableName: 'mergejil_shalguur',
-      timestamps: true /* created updated */,
+      timestamps: false /* created updated */,
     }
   );
 };

@@ -15,7 +15,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       tableName: 'shalguur_medeelel',
-      timestamps: true /* created updated */,
+      timestamps: false /* created updated */,
     }
   );
 };

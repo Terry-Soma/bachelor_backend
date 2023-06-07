@@ -2,7 +2,7 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     'Hutulbur',
     {
-      Id: {
+      id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
         primaryKey: true,
@@ -30,14 +30,14 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         references: {
           model: 'school',
-          key: 'Id',
+          key: 'id',
         },
       },
     },
 
     {
       tableName: 'hutulbur',
-      timestamps: true /* created updated */,
+      timestamps: false /* created updated */,
     }
   );
 };

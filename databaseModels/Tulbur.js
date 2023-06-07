@@ -35,7 +35,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       tableName: 'tburtgel',
-      timestamps: true /* created updated */,
+      timestamps: false /* created updated */,
     }
   );
 };

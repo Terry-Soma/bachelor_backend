@@ -63,7 +63,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     {
       tableName: 'elsegch',
-      timestamps: true,
+      timestamps: false,
     }
   );
 };
