@@ -13,9 +13,12 @@ exports.getAll = asyncHandler(async (req, res, next) => {
       [key]: req.params[key],
     };
   }
-  const { prepared_statement } = new PQ(req.models.Mergejil, req.query).exec();
-  const mergejil = await prepared_statement;
 
+  // const { prepared_statement } = new PQ(req.models.Mergejil, req.query).exec();
+  // const mergejil = await prepared_statement;
+  const mergejil = await req.sequelize.query(rawQueries.mergejilInfo, {
+    type: QueryTypes.SELECT,
+  })
   res.status(200).json({
     status: 'success',
     data: mergejil,

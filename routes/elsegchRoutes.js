@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const elsegchController = require('../controllers/_elsegch.controller');
+const { protect } = require('../middlewares/_protect');
 
 router
   .route('/')

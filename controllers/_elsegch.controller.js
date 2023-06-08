@@ -13,7 +13,7 @@ exports.getAll = factory.getAll(Elsegch);
 
 
 exports.getAllElsegchWithMergejil = asyncHandler(async (req, res, next) => {
-  const data = await req.sequelize.query(rawQueries.getAllBurtgel, {
+  const data = await req.sequelize.query(rawQueries.elsegchInfo, {
     type: QueryTypes.SELECT,
   });
   res.status(200).json({

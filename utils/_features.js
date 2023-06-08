@@ -5,6 +5,7 @@ class PQ {
     this.model = model;
     this.queryString = queryString;
     this.#obj.where = queryString.where ? queryString.where : null;
+    this.#obj.include = queryString.include ? queryString.include : null;
   }
 
   exec() {

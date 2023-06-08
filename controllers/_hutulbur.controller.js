@@ -4,6 +4,7 @@ const AppError = require('../utils/_appError');
 const PQ = require('../utils/_features');
 const factory = require('./factory');
 const { Hutulbur } = require('./../databaseModels/AllModels');
+const { query } = require('express');
 exports.getAll = asyncHandler(async (req, res, next) => {
   if (Object.entries(req.params).length === 1) {
     let key = Object.keys(req.params);
@@ -11,6 +12,12 @@ exports.getAll = asyncHandler(async (req, res, next) => {
       [key]: req.params[key],
     };
   }
+  // const data = req.models.Hutulbur.findAll({
+  //   include: req.models.School
+  // })
+  let model = req.models.School
+  req.query.include = { model, attributes: ["name"] }
+
   const { prepared_statement } = new PQ(req.models.Hutulbur, req.query).exec();
   const hutulbur = await prepared_statement;
 

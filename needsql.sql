@@ -6,7 +6,7 @@ ORDER BY s.id DESC;
 
 
 # surguuli bolon too checked
-SELECT count(s.id) as too,s.name
+SELECT count(s.id) as value ,s.name
 FROM eburtgel e
 inner join mergejil m
 on m.id = e.mergejilId

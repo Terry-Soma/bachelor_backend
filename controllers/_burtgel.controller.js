@@ -5,77 +5,40 @@ const { QueryTypes } = require('sequelize');
 const rawQueries = require('../config/raw.queries');
 
 exports.getAll = asyncHandler(async (req, res, next) => {
-  //   const data = await req.models.Burtgel.findAll({
-  //     include: [
-  //       {
-  //         model: req.models.Mergejil,
-  //       },
-  //     ],
-  //   });
   const data = await req.sequelize.query(rawQueries.burtgelInfo, {
     type: QueryTypes.SELECT,
   });
+  res.status(200).json({
+    status: 'success',
+    data,
+  });
+});
 
+exports.getSchoolAndCount = asyncHandler(async (req, res, next) => {
+  const data = await req.sequelize.query(rawQueries.schoolAndCount, {
+    type: QueryTypes.SELECT,
+  });
   res.status(200).json({
     status: 'success',
     data,
   });
 });
 exports.getCount = asyncHandler(async (req, res, next) => {
-  // const data = await req.models.Burtgel.findAll({
-  //   attributes: [
-  //     'mergejilId',
-  //     [
-  //       req.models.sequelize.fn('COUNT', req.models.sequelize.col('mergejilId')),
-  //       'Count',
-  //     ],
-  //   ],
-  //   include: [
-  //     {
-  //       model: req.models.Mergejil,
-  //       attributes: ['name'],
-  //     },
-  //   ],
-  //   group: 'mergejilId',
-  // });/*  more complex  */
-  const data = await req.sequelize.query(rawQueries.getCount, {
+  let elsegchToo = await req.sequelize.query(rawQueries.getCountElsegch, {
     type: QueryTypes.SELECT,
   });
-  const sdata = await req.sequelize.query(rawQueries.getSchoolBurtgelCount, {
+  elsegchToo = elsegchToo[0]?.too
+  let allEbtoo = await req.sequelize.query(rawQueries.countEburtgel, {
     type: QueryTypes.SELECT,
   });
-  const kdata = await req.models.Elsegch.findAll({
-    attributes: [
-      [
-        req.sequelize.fn('COUNT', req.sequelize.col('burtgel_Id')),
-        'burt',
-      ],
-    ],
-    where: {
-      komisId: {
-        [Op.ne]: null,
-      },
-    },
-  });
-  const odata = await req.models.Elsegch.findAll({
-    attributes: [
-      [
-        req.sequelize.fn('COUNT', req.sequelize.col('burtgel_Id')),
-        'burt',
-      ],
-    ],
-    where: {
-      komisId: {
-        [Op.eq]: null,
-      },
-    },
+  allEbtoo = allEbtoo[0]?.m_too
+  const data = await req.sequelize.query(rawQueries.burtgelInfo, {
+    type: QueryTypes.SELECT,
   });
   /* only one field */
   res.status(200).json({
     status: 'success',
-    data,
-    sdata,
-    kdata,
-    odata,
+    elsegchToo,
+    allMergejilCount: allEbtoo,
   });
 });
