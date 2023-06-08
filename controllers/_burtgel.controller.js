@@ -23,6 +23,34 @@ exports.getSchoolAndCount = asyncHandler(async (req, res, next) => {
     data,
   });
 });
+exports.getMergejilAndCount = asyncHandler(async (req, res, next) => {
+  const data = await req.sequelize.query(rawQueries.getCountMergejil, {
+    type: QueryTypes.SELECT,
+  });
+  res.status(200).json({
+    status: 'success',
+    data,
+  });
+});
+exports.getAllhutulbur = asyncHandler(async (req, res, next) => {
+  const data = await req.sequelize.query(rawQueries.hutulburAndCount, {
+    type: QueryTypes.SELECT,
+  });
+  res.status(200).json({
+    status: 'success',
+    data,
+  });
+});
+exports.getAllaimagAndCount = asyncHandler(async (req, res, next) => {
+  const data = await req.sequelize.query(rawQueries.aimagAndCount, {
+    type: QueryTypes.SELECT,
+  });
+  res.status(200).json({
+    status: 'success',
+    data,
+  });
+});
+
 exports.getCount = asyncHandler(async (req, res, next) => {
   let elsegchToo = await req.sequelize.query(rawQueries.getCountElsegch, {
     type: QueryTypes.SELECT,

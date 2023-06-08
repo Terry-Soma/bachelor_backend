@@ -13,7 +13,18 @@ module.exports = {
   elsegchInfo: "SELECT * FROM `elsegchinfoview`;",
   mergejilInfo: "SELECT * FROM `allaboutmergejil`;",
   schoolAndCount: "SELECT * FROM `schoolandcount`;",
-
+  aimagAndCount: `select count(aimag_id) Элсэгч,a.ner as name
+  from elsegch
+  inner join aimag a
+  on a.id = aimag_id
+  group by aimag_id;`,
+  hutulburAndCount: `select count(h.id) as нийт, h.name
+  from hutulbur h
+  inner join mergejil m
+  on h.id = m.hutulburId
+  inner join eburtgel eb
+  on eb.mergejilid= m.id
+  group by h.id`,
   burtgelInfo: `select e.elsegchId,
   (select group_concat(m.name)) as "mergejil", 
   el.lname,el.fname,el.email, el.rd, el.gerchilgee_dugaar, el.img, el.utas, a.ner as "aimag"
@@ -27,18 +38,10 @@ module.exports = {
   group by e.elsegchId;
   `,
   // mergejil and elsegchiin hamaaral
-  getCountMergejil: `select mergejilId,count(mergejilId) as "count", m.name from eburtgel e inner join mergejil m on m.Id = e.mergejilId group by mergejilId;`,
+  getCountMergejil: `select count(mergejilId) as Элсэгчид, m.name from eburtgel e inner join mergejil m on m.Id = e.mergejilId group by mergejilId
+  order by Элсэгчид desc;`,
   countEburtgel: `select count(mergejilId) as m_too from eburtgel;`,
   getCountElsegch: `select count(burtgel_Id) as too from elsegch;`,
-  getSchoolBurtgelCount: `select s.Id, count(e.mergejilId) as "bcount", s.slug,s.img,s.address
-  from eburtgel e 
-  inner join mergejil m 
-  on m.Id = e.mergejilId 	
-  inner join hutulbur h 
-  on h.Id = m.hutulburId
-  inner join school s
-  on s.Id = h.schoolId
-  group by s.Id;`,
   getAllBurtgel: `
   select e.burtgel_Id as "but",e.lname as "ovog",e.fname as "ner",
   e.email,(select group_concat(m.name)) as "mergejil", e.rd, e.utas, e.aimag_id as "aimag"
